@@ -1,0 +1,112 @@
+/* Reset some defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+  z-index: 100;
+}
+
+/* Logo */
+.navbar_left .logo {
+  width: 120px;
+  cursor: pointer;
+}
+
+/* Menu */
+.navbar_menu {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar_menu li {
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.navbar_menu li:hover {
+  color: #4CAF50;
+}
+
+/* Right section */
+.navbar_right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search_icon {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.basket_container {
+  position: relative;
+}
+
+.basket_icon {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.dot {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+/* Sign in button */
+.sign_in_btn {
+  padding: 6px 12px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.sign_in_btn:hover {
+  background-color: #45a049;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .navbar_menu {
+    display: none; /* On peut remplacer par un menu burger plus tard */
+    width: 100%;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+
+  .navbar_right {
+    gap: 10px;
+  }
+
+  .logo {
+    width: 100px;
+  }
+}
+
+/* Optional: show menu on small screens with burger (future improvement) */
