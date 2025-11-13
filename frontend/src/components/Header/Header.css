@@ -1,0 +1,154 @@
+.header {
+    width: 90%; /* Réduit la largeur à 90% */
+    max-width: 1200px; /* Largeur maximale */
+    height: 80vh;
+    margin: 0 auto; /* Centre le header */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/header_img');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Changé pour aligner à gauche */
+    text-align: left; /* Changé pour aligner le texte à gauche */
+    color: white;
+    position: relative;
+    
+    /* Bordures */
+    border: 2px solid #e0e0e0;
+    border-radius: 15px; /* Coins arrondis */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Pour contenir le contenu dans les bordures */
+    margin-top: 20px; /* Espace au-dessus */
+    margin-bottom: 20px; /* Espace en-dessous */
+}
+
+.header_content {
+    max-width: 800px;
+    padding: 0 50px; /* Plus de padding à gauche */
+    z-index: 2;
+    text-align: left; /* Assurance que le texte est à gauche */
+}
+
+.header_content h2 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease-out;
+    max-width: 600px; /* Largeur réduite du h2 */
+    text-align: left; /* Texte aligné à gauche */
+}
+
+.header_content p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1.2s ease-out;
+    max-width: 700px; /* Largeur réduite du paragraphe aussi */
+    text-align: left; /* Texte aligné à gauche */
+}
+
+/* Animation pour le texte */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bouton optionnel */
+.header_btn {
+    padding: 12px 30px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeInUp 1.4s ease-out;
+    text-align: left; /* Pour le texte du bouton */
+    align-self: flex-start; /* Pour aligner le bouton à gauche */
+}
+
+.header_btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .header {
+        width: 95%; /* Un peu plus large sur tablettes */
+        height: 70vh;
+    }
+    
+    .header_content {
+        padding: 0 40px;
+    }
+    
+    .header_content h2 {
+        max-width: 500px;
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        width: 95%;
+        height: 60vh;
+        border-radius: 10px; /* Coins moins arrondis sur mobile */
+    }
+    
+    .header_content {
+        padding: 0 30px;
+    }
+    
+    .header_content h2 {
+        font-size: 2.5rem;
+        max-width: 400px;
+    }
+    
+    .header_content p {
+        font-size: 1.1rem;
+        max-width: 500px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header {
+        width: 97%;
+        height: 50vh;
+        border: 1px solid #e0e0e0; /* Bordure plus fine sur mobile */
+        border-radius: 8px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .header_content {
+        padding: 0 20px;
+    }
+    
+    .header_content h2 {
+        font-size: 2rem;
+        max-width: 300px;
+    }
+    
+    .header_content p {
+        font-size: 1rem;
+        max-width: 350px;
+    }
+    
+    .header_btn {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+}
