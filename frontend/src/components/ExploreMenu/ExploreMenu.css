@@ -1,0 +1,180 @@
+.explore_menu {
+    padding: 50px 20px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.explore_menu h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.explore_menu p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.menu_list {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr); /* 8 colonnes fixes */
+    gap: 15px; /* Espacement réduit */
+    max-width: 1400px; /* Largeur maximale augmentée */
+    margin: 0 auto;
+    padding: 0 20px;
+    justify-items: center; /* Centre les éléments dans les cellules */
+}
+
+.menu_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px; /* Padding réduit */
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    width: 100%; /* Prend toute la largeur de la cellule */
+    max-width: 120px; /* Largeur maximale réduite */
+}
+
+.menu_item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #4CAF50;
+}
+
+.menu_item img {
+    width: 60px; /* Image plus petite */
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px; /* Marge réduite */
+    transition: transform 0.3s ease;
+}
+
+.menu_item:hover img {
+    transform: scale(1.1);
+}
+
+.menu_item p {
+    font-size: 0.85rem; /* Texte plus petit */
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Responsive Design - Adaptation pour écrans plus petits */
+@media screen and (max-width: 1200px) {
+    .menu_list {
+        grid-template-columns: repeat(4, 1fr); /* 4 colonnes sur écrans moyens */
+        gap: 20px;
+        max-width: 800px;
+    }
+    
+    .menu_item {
+        max-width: 140px;
+        padding: 15px 12px;
+    }
+    
+    .menu_item img {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .menu_item p {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .explore_menu {
+        padding: 40px 15px;
+    }
+    
+    .explore_menu h1 {
+        font-size: 2rem;
+    }
+    
+    .explore_menu p {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+    
+    .menu_list {
+        grid-template-columns: repeat(4, 1fr); /* 4 colonnes sur tablettes */
+        gap: 15px;
+        max-width: 600px;
+        padding: 0 15px;
+    }
+    
+    .menu_item {
+        max-width: 120px;
+        padding: 12px 8px;
+    }
+    
+    .menu_item img {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .menu_item p {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .explore_menu {
+        padding: 30px 10px;
+    }
+    
+    .explore_menu h1 {
+        font-size: 1.8rem;
+    }
+    
+    .explore_menu p {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+    }
+    
+    .menu_list {
+        grid-template-columns: repeat(4, 1fr); /* 4 colonnes sur mobile */
+        gap: 10px;
+        padding: 0 10px;
+    }
+    
+    .menu_item {
+        max-width: 100px;
+        padding: 10px 5px;
+    }
+    
+    .menu_item img {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .menu_item p {
+        font-size: 0.7rem;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .menu_list {
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur très petits écrans */
+        gap: 12px;
+    }
+    
+    .menu_item {
+        max-width: 130px;
+    }
+}

@@ -1,0 +1,249 @@
+.food_item {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.food_item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.food_images {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.food_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.food_image_secondary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+
+.food_content {
+    padding: 20px;
+}
+
+.food_name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.food_description {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.food_bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.food_price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #4CAF50;
+}
+
+/* Styles pour le bouton Add */
+.add_btn {
+    background: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.add_btn:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+/* Styles pour le compteur */
+.counter_container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8f9fa;
+    border-radius: 25px;
+    padding: 4px;
+}
+
+.counter_btn {
+    background: #4CAF50;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.counter_btn:hover {
+    background: #45a049;
+    transform: scale(1.1);
+}
+
+.counter_btn:active {
+    transform: scale(0.95);
+}
+
+.item_count {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    min-width: 25px;
+    text-align: center;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .food_images {
+        height: 180px;
+    }
+    
+    .food_content {
+        padding: 15px;
+    }
+    
+    .food_name {
+        font-size: 1.1rem;
+    }
+    
+    .food_description {
+        font-size: 0.85rem;
+    }
+    
+    .food_price {
+        font-size: 1.2rem;
+    }
+    
+    .counter_container {
+        gap: 10px;
+    }
+    
+    .counter_btn {
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+    }
+    
+    .item_count {
+        font-size: 1rem;
+    }
+    
+    .add_btn {
+        padding: 7px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .food_images {
+        height: 160px;
+    }
+    
+    .food_content {
+        padding: 12px;
+    }
+    
+    .food_name {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+    
+    .food_description {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+    
+    .food_price {
+        font-size: 1.1rem;
+    }
+    
+    .counter_container {
+        gap: 8px;
+    }
+    
+    .counter_btn {
+        width: 25px;
+        height: 25px;
+        font-size: 0.9rem;
+    }
+    
+    .item_count {
+        font-size: 0.9rem;
+        min-width: 20px;
+    }
+    
+    .add_btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Animation pour le changement de quantité */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.item_count {
+    transition: all 0.2s ease;
+}
+
+.counter_btn:active + .item_count,
+.item_count:has(+ .counter_btn:active) {
+    animation: pulse 0.3s ease;
+}
+
+/* États désactivés */
+.counter_btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.counter_btn:disabled:hover {
+    background: #ccc;
+    transform: none;
+}
