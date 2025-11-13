@@ -16,97 +16,245 @@
   z-index: 100;
 }
 
-/* Logo */
+/* LEFT SECTION - Logo */
+.navbar_left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
 .navbar_left .logo {
   width: 120px;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-/* Menu */
+.navbar_left .logo:hover {
+  transform: scale(1.05);
+}
+
+/* CENTER SECTION - Navigation Menu */
+.navbar_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 2;
+}
+
 .navbar_menu {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 40px;
+  justify-content: center;
 }
 
 .navbar_menu li {
   cursor: pointer;
   font-weight: 500;
-  transition: color 0.2s ease;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: #333;
 }
 
 .navbar_menu li:hover {
   color: #4CAF50;
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
 }
 
-/* Right section */
+/* RIGHT SECTION - User Actions */
 .navbar_right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 25px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Search */
+.search_container {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .search_icon {
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
 }
 
+.search_icon:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* Basket */
 .basket_container {
   position: relative;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.basket_container:hover {
+  background-color: #f8f9fa;
 }
 
 .basket_icon {
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.basket_container:hover .basket_icon {
+  opacity: 1;
 }
 
 .dot {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 10px;
-  height: 10px;
-  background-color: red;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff4444;
   border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 /* Sign in button */
 .sign_in_btn {
-  padding: 6px 12px;
+  padding: 10px 20px;
   border: none;
   background-color: #4CAF50;
   color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  margin-left: 10px;
 }
 
 .sign_in_btn:hover {
   background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-/* Responsive */
+/* Burger menu for mobile */
+.burger_menu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  color: #333;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+  .navbar_menu {
+    gap: 30px;
+  }
+  
+  .navbar_menu li {
+    font-size: 15px;
+    padding: 6px 12px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .navbar {
     flex-wrap: wrap;
+    padding: 12px 15px;
+  }
+
+  .navbar_center {
+    order: 3;
+    flex: 100%;
+    margin-top: 15px;
   }
 
   .navbar_menu {
-    display: none; /* On peut remplacer par un menu burger plus tard */
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
     width: 100%;
-    justify-content: space-around;
-    margin-top: 10px;
+    background-color: white;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    gap: 15px;
+    z-index: 1000;
+  }
+
+  .navbar_menu.active {
+    display: flex;
+  }
+
+  .navbar_menu li {
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .navbar_menu li:last-child {
+    border-bottom: none;
+  }
+
+  .burger_menu {
+    display: block;
   }
 
   .navbar_right {
-    gap: 10px;
+    gap: 20px;
   }
 
   .logo {
     width: 100px;
   }
+
+  .sign_in_btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
 }
 
-/* Optional: show menu on small screens with burger (future improvement) */
+@media screen and (max-width: 480px) {
+  .navbar {
+    padding: 10px 12px;
+  }
+
+  .navbar_right {
+    gap: 15px;
+  }
+
+  .search_icon,
+  .basket_icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sign_in_btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
