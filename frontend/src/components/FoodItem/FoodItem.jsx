@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './FoodItem.css'
-import { useState } from 'react'
+import { StoreContext } from '../../context/StoreContext'
 
 function FoodItem({ id, name, description, price, image}) {
-    const [itemCount, setItemCount] = useState(0)
+
+    const { cartItems, addToCart, removeFromCart } = useContext(StoreContext);
+
+    // quantité de cet item dans le panier
+    const quantity = cartItems[id] || 0;
 
     return (
         <div className='food_item'>
             <div className='food_images'>
                 <img src={image} alt={name} className='food_image' />
-
             </div>
             
             <div className='food_content'>
@@ -19,10 +22,10 @@ function FoodItem({ id, name, description, price, image}) {
                 <div className='food_bottom'>
                     <div className='food_price'>${price}</div>
                     
-                    {itemCount === 0 ? (
+                    {quantity === 0 ? (
                         <button 
                             className='add_btn'
-                            onClick={() => setItemCount(1)}
+                            onClick={() => addToCart(id)}
                         >
                             Add +
                         </button>
@@ -30,14 +33,16 @@ function FoodItem({ id, name, description, price, image}) {
                         <div className='counter_container'>
                             <button 
                                 className='counter_btn'
-                                onClick={() => setItemCount(itemCount - 1)}
+                                onClick={() => removeFromCart(id)}
                             >
                                 -
                             </button>
-                            <span className='item_count'>{itemCount}</span>
+
+                            <span className='item_count'>{quantity}</span>
+
                             <button 
                                 className='counter_btn'
-                                onClick={() => setItemCount(itemCount + 1)}
+                                onClick={() => addToCart(id)}
                             >
                                 +
                             </button>
@@ -49,4 +54,4 @@ function FoodItem({ id, name, description, price, image}) {
     )
 }
 
-export default FoodItem
+export default FoodItem;
