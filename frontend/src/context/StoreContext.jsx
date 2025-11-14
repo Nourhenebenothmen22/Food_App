@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { food_list } from "../assets/assets";
 
 export const StoreContext = createContext(null);
@@ -44,6 +44,9 @@ const StoreContextProvider = (props) => {
       return updatedCart;
     });
   };
+  useEffect(()=>{
+console.log(cartItems)
+  },[cartItems])
 
   // Les valeurs à partager aux autres composants
   const contextValue = {
