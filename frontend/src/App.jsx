@@ -1,26 +1,39 @@
-import React from 'react'
-import Navbar from './components/Navbar/Navbar'
-import { Route, Routes } from 'react-router-dom'
-import Home from './pages/Home/Home'
-import Cart from './pages/Cart/Cart'
-import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
-import Footer from './components/Footer/Footer'
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Cart from './pages/Cart/Cart';
+import PlaceOrder from './pages/PlaceOrder/PlaceOrder';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
+import Layout from './pages/Layout';
 
 function App() {
   return (
-    <>
     <div className='app'>
-      <Navbar/>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/cart' element={<Cart/>}/>
-        <Route path='/order' element={<PlaceOrder/>}/>
+        {/* Routes avec Layout (navbar + footer) */}
+        <Route path='/' element={
+          <Layout>
+            <Home />
+          </Layout>
+        } />
+        <Route path='/cart' element={
+          <Layout>
+            <Cart />
+          </Layout>
+        } />
+        <Route path='/order' element={
+          <Layout>
+            <PlaceOrder />
+          </Layout>
+        } />
+        
+        {/* Routes sans Layout (pas de navbar/footer) */}
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </div>
-    <Footer/>
-    </>
-    
-  )
+  );
 }
 
-export default App
+export default App;

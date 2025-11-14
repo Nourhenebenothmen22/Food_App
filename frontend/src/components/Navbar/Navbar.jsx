@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
 
@@ -18,20 +19,30 @@ function Navbar() {
       
       {/* LEFT SECTION - Logo */}
       <div className='navbar_left'>
-        <img 
-          src={assets.logo} 
-          alt="Company Logo" 
-          className='logo' 
-        />
+        <Link to="/">
+          <img 
+            src={assets.logo} 
+            alt="Company Logo" 
+            className='logo' 
+          />
+        </Link>
       </div>
 
       {/* CENTER SECTION - Navigation Menu */}
       <div className='navbar_center'>
         <ul className={`navbar_menu ${isMenuOpen ? 'active' : ''}`}>
-          <li onClick={closeMenu}>Home</li>
-          <li onClick={closeMenu}>Menu</li>
-          <li onClick={closeMenu}>Mobile App</li>
-          <li onClick={closeMenu}>Contact Us</li>
+          <li onClick={closeMenu}>
+            <Link to="/">Home</Link>
+          </li>
+          <li onClick={closeMenu}>
+            <Link to="/menu">Menu</Link>
+          </li>
+          <li onClick={closeMenu}>
+            <Link to="/app">Mobile App</Link>
+          </li>
+          <li onClick={closeMenu}>
+            <Link to="/contact">Contact Us</Link>
+          </li>
         </ul>
       </div>
 
@@ -50,22 +61,26 @@ function Navbar() {
 
         {/* Shopping Basket */}
         <div className='basket_container'>
-          <img 
-            src={assets.basket_icon} 
-            alt="Shopping Basket" 
-            className='basket_icon' 
-            title="View cart"
-          />
-          <div className='dot' title="Items in cart"></div>
+          <Link to="/cart">
+            <img 
+              src={assets.basket_icon} 
+              alt="Shopping Basket" 
+              className='basket_icon' 
+              title="View cart"
+            />
+            <div className='dot' title="Items in cart"></div>
+          </Link>
         </div>
 
         {/* Sign In Button */}
-        <button 
-          className='sign_in_btn'
-          title="Sign in to your account"
-        >
-          Sign In
-        </button>
+        <Link to="/login">
+          <button 
+            className='sign_in_btn'
+            title="Sign in to your account"
+          >
+            Sign In
+          </button>
+        </Link>
 
         {/* Burger Menu for Mobile */}
         <button 
