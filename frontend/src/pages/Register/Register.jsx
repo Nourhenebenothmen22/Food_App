@@ -7,7 +7,8 @@ function Register() {
     fullName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'user'
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -18,9 +19,15 @@ function Register() {
     });
   };
 
+  const handleRoleSelect = (role) => {
+    setFormData({
+      ...formData,
+      role: role
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Gestion de l'inscription
     console.log('Register data:', formData);
   };
 
@@ -58,6 +65,26 @@ function Register() {
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label>Account Type</label>
+            <div className="role-options">
+              <div 
+                className={`role-option ${formData.role === 'user' ? 'selected' : ''}`}
+                onClick={() => handleRoleSelect('user')}
+              >
+                <span className="role-icon">👤</span>
+                User
+              </div>
+              <div 
+                className={`role-option ${formData.role === 'admin' ? 'selected' : ''}`}
+                onClick={() => handleRoleSelect('admin')}
+              >
+                <span className="role-icon">👑</span>
+                Admin
+              </div>
+            </div>
           </div>
 
           <div className="form-group">
