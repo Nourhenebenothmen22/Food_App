@@ -6,6 +6,11 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const morgan = require('morgan');
 const chalk = require('chalk');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db'); // <- Import du connecteur MongoDB
+
+dotenv.config();
+connectDB(); 
 
 const app = express();
 
@@ -17,6 +22,7 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 app.use(compression());
 app.use(morgan('dev'));
+
 function sanitizeInput(obj) {
   for (let key in obj) {
     if (typeof obj[key] === 'string') {
@@ -34,7 +40,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Rate limiting
 const limiter = rateLimit({ windowMs: 15*60*1000, max: 20, message: 'Trop de requêtes' });
 app.use(limiter);
@@ -48,5 +53,6 @@ app.get('/', (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(chalk.blue(`Server running on port ${PORT}`));
+  console.log(`🚀 Server running on port ${PORT} ✅`);
 });
+
