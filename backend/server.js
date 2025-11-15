@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 
 
 // Rate limiting
-const limiter = rateLimit({ windowMs: 15*60*1000, max: 100, message: 'Trop de requêtes' });
+const limiter = rateLimit({ windowMs: 15*60*1000, max: 20, message: 'Trop de requêtes' });
 app.use(limiter);
 
 // Routes
