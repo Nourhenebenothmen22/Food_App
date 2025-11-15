@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String, 
         required: true,
-        select: false 
     },
     role: {
         type: String,
@@ -24,29 +23,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-
-    // ✅ Email Verification Fields
-    verifyOtp: {
+    phone: {
         type: String,
+        required: false,
         default: ""
-    },
-    verifyOtpExpireAt: {
-        type: Number, 
-        default: 0
     },
     isAccountVerified: {
         type: Boolean,
-    },
-
-    // 🔁 Password Reset Fields
-    resetOtp: {
-        type: String,
-        default: "",
-    },
-    resetOtpExpireAt: {
-        type: Number,
-        default: 0,
-     
+        default: false
     }
 }, { timestamps: true }); // ajoute createdAt et updatedAt automatiquement
 
