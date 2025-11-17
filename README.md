@@ -6,6 +6,41 @@ Backend de l'application Food App, développé avec **Node.js** et **Express**, 
 
 ## 🗂 Structure du projet
 
+backend/
+│
+├─ config/
+│  ├─ db.js          # Connexion à MongoDB
+│  └─ mailer.js      # Configuration email
+│
+├─ controllers/
+│  ├─ authController.js
+│  └─ FoodController.js
+│
+├─ middlewares/
+│  ├─ authMiddleware.js
+│  └─ authValidation.js
+│
+├─ models/
+│  ├─ Food.js
+│  └─ User.js
+│
+├─ routes/
+│  ├─ authRoutes.js
+│  └─ FoodRoutes.js
+│
+├─ templates/
+│  ├─ otpTemplate.js
+│  └─ welcomeTemplate.js
+│
+├─ utils/
+│  └─ generateToken.js
+│
+├─ uploads/          # Dossier pour images uploadées
+├─ server.js         # Fichier principal du serveur
+├─ package.json
+└─ .env
+
+
 
 ---
 
