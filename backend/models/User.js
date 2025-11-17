@@ -31,7 +31,12 @@ const userSchema = new mongoose.Schema({
     isAccountVerified: {
         type: Boolean,
         default: false
-    }
+    },
+    otp: String,
+  otpExpire: Date,
+
+  resetOtp: String,
+  resetOtpExpire: Date
 }, { timestamps: true }); // ajoute createdAt et updatedAt automatiquement
 
 module.exports = mongoose.model('User', userSchema);
