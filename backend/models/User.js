@@ -37,6 +37,6 @@ const userSchema = new mongoose.Schema({
 
   resetOtp: String,
   resetOtpExpire: Date
-}, { timestamps: true }); // ajoute createdAt et updatedAt automatiquement
+}, { timestamps: true }); 
 
 module.exports = mongoose.model('User', userSchema);
