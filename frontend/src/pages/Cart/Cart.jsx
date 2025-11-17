@@ -2,9 +2,12 @@ import React from 'react'
 import './Cart.css'
 import { useContext } from 'react'
 import { StoreContext } from '../../context/StoreContext'
+import {  useNavigate } from 'react-router-dom'
 
 function Cart() {
     const { food_list, cartItems, removeFromCart, getTotalCartAmount } = useContext(StoreContext)
+    const navigate = useNavigate(); // ✅ hook pour la navigation
+
     
     // Calcul du total
     const totalAmount = getTotalCartAmount(cartItems, food_list);
@@ -42,7 +45,7 @@ function Cart() {
             {/* Total du panier */}
             <div className='cart-summary'>
                 <h3>Cart Total: ${totalAmount}</h3>
-                <button className='checkout-btn'>Proceed to Checkout</button>
+                <button onClick={()=>navigate('/order')}  className='checkout-btn'>Proceed to Checkout</button>
             </div>
         </div>
     )
