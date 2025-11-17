@@ -17,3 +17,37 @@ Bienvenue dans le backend de **Food App**, une API Node.js avec MongoDB pour gé
 
 ## 📂 Structure du projet
 
+backend/
+│
+├── 🗂️ config/
+│   ├── 🗃️ db.js          # Configuration MongoDB
+│   └── 🗃️ mailer.js      # Configuration email
+│
+├── 🎮 controllers/
+│   ├── 🎯 authController.js
+│   └── 🎯 FoodController.js
+│
+├── 🛡️ middlewares/
+│   ├── 🔐 authMiddleware.js
+│   └── ✅ authValidation.js
+│
+├── 🗃️ models/
+│   ├── 📄 Food.js
+│   └── 📄 User.js
+│
+├── 🛣️ routes/
+│   ├── 🚦 authRoutes.js
+│   └── 🚦 FoodRoutes.js
+│
+├── 📧 templates/
+│   ├── ✉️ otpTemplate.js
+│   └── ✉️ welcomeTemplate.js
+│
+├── 🔧 utils/
+│   └── 🎫 generateToken.js
+│
+├── 📁 uploads/           # 📸 Dossier des images
+├── 🚀 server.js          # ⚡ Point d'entrée
+├── 📋 package.json
+└── 🔐 .env
+
