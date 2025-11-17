@@ -4,6 +4,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const otpTemplate = require("../templates/otpTemplate");
 const generateToken = require("../utils/generateToken");
+const welcomeTemplate = require("../templates/welcomeTemplate");
 
 // ---------------- REGISTER ----------------
 exports.register = async (req, res) => {
@@ -75,6 +76,12 @@ exports.verifyOtp = async (req, res) => {
         user.otpExpire = null;
 
         await user.save();
+        await transporter.sendMail({
+            from: "noreply@test.com",
+            to: email,
+            subject: "Welcome to Our Platform! 🎉",
+            html: welcomeTemplate(user.name)
+        });
 
         return res.status(200).json({ message: "OTP verified and account successfully activated" });
 
