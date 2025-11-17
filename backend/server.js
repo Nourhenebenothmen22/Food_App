@@ -49,6 +49,7 @@ app.get('/', (req, res) => {
   console.log(chalk.green('Route / visitée'));
   res.send('Backend sécurisé et prêt ✅');
 });
+app.use("/api/v1/auth", require("./routes/authRoutes"));
 
 // Start server
 const PORT = process.env.PORT || 5000;
