@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
+import { useContext } from 'react';
+import { StoreContext } from '../../context/StoreContext';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,7 +15,7 @@ function Navbar() {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-
+const { getTotalCartAmount, cartItems, food_list } = useContext(StoreContext);
   return (
     <nav className='navbar'>
       
@@ -68,7 +70,7 @@ function Navbar() {
               className='basket_icon' 
               title="View cart"
             />
-            <div className='dot' title="Items in cart"></div>
+<div className={getTotalCartAmount(cartItems, food_list) == 0 ? "" : 'dot'} title="Items in cart"></div>
           </Link>
         </div>
 

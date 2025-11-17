@@ -44,17 +44,16 @@ const StoreContextProvider = (props) => {
       return updatedCart;
     });
   };
- const getTotalCartAmount = (cartItems, food_list) => {
+ const getTotalCartAmount = () => {
     let totalAmount = 0;
-    
     food_list.forEach((item) => {
         if (cartItems[item._id] > 0) {
             totalAmount += item.price * cartItems[item._id];
         }
     });
-    
     return totalAmount;
 };
+
   useEffect(()=>{
 console.log(cartItems)
   },[cartItems])
