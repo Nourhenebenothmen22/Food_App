@@ -7,40 +7,30 @@ Backend de l'application Food App, développé avec **Node.js** et **Express**, 
 ## 🗂 Structure du projet
 
 backend/
-│
-├─ config/
-│  ├─ db.js          # Connexion à MongoDB
-│  └─ mailer.js      # Configuration email
-│
-├─ controllers/
-│  ├─ authController.js
-│  └─ FoodController.js
-│
-├─ middlewares/
-│  ├─ authMiddleware.js
-│  └─ authValidation.js
-│
-├─ models/
-│  ├─ Food.js
-│  └─ User.js
-│
-├─ routes/
-│  ├─ authRoutes.js
-│  └─ FoodRoutes.js
-│
-├─ templates/
-│  ├─ otpTemplate.js
-│  └─ welcomeTemplate.js
-│
-├─ utils/
-│  └─ generateToken.js
-│
-├─ uploads/          # Dossier pour images uploadées
-├─ server.js         # Fichier principal du serveur
-├─ package.json
-└─ .env
-
-
+├── 📂 config/
+│   ├── db.js          # Configuration MongoDB
+│   └── mailer.js      # Configuration email
+├── 📂 controllers/
+│   ├── authController.js
+│   └── FoodController.js
+├── 📂 middlewares/
+│   ├── authMiddleware.js
+│   └── authValidation.js
+├── 📂 models/
+│   ├── Food.js
+│   └── User.js
+├── 📂 routes/
+│   ├── authRoutes.js
+│   └── FoodRoutes.js
+├── 📂 templates/
+│   ├── otpTemplate.js
+│   └── welcomeTemplate.js
+├── 📂 utils/
+│   └── generateToken.js
+├── 📂 uploads/        # Dossier des images
+├── 🚀 server.js       # Point d'entrée
+├── 📄 package.json
+└── 🔒 .env
 
 ---
 
@@ -58,8 +48,6 @@ backend/
 | ![Helmet](https://img.shields.io/badge/Helmet-4A4A4A?style=for-the-badge) | Sécurisation des headers HTTP |
 | ![Cors](https://img.shields.io/badge/CORS-ff6f00?style=for-the-badge) | Gestion des requêtes cross-origin |
 | ![Morgan](https://img.shields.io/badge/Morgan-0A0A0A?style=for-the-badge) | Logger des requêtes HTTP |
-| ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white) | Tests unitaires |
-| ![Supertest](https://img.shields.io/badge/Supertest-6A4C93?style=for-the-badge) | Tests des routes API |
 | ![Nodemon](https://img.shields.io/badge/Nodemon-76D04B?style=for-the-badge&logo=nodemon&logoColor=white) | Redémarrage automatique serveur en dev |
 
 ---
