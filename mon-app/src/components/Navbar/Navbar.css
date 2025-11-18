@@ -1,0 +1,120 @@
+/* Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    min-height: 60px;
+}
+
+.logo {
+    height: 35px;
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.profile:hover {
+    border-color: #007bff;
+    transform: scale(1.1);
+}
+
+/* Tablettes */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+        min-height: 55px;
+    }
+    
+    .logo {
+        height: 30px;
+    }
+    
+    .profile {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Mobiles */
+@media screen and (max-width: 480px) {
+    .navbar {
+        padding: 0.4rem 0.8rem;
+        min-height: 50px;
+    }
+    
+    .logo {
+        height: 28px;
+    }
+    
+    .profile {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* Très petits écrans */
+@media screen and (max-width: 320px) {
+    .navbar {
+        padding: 0.3rem 0.6rem;
+        min-height: 45px;
+    }
+    
+    .logo {
+        height: 25px;
+    }
+    
+    .profile {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* Mode sombre optionnel */
+@media (prefers-color-scheme: dark) {
+    .navbar {
+        background-color: #1a1a1a;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .profile {
+        border-color: #444;
+    }
+}
+
+/* Animation pour le scroll */
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+@media (prefers-color-scheme: dark) {
+    .navbar.scrolled {
+        background-color: rgba(26, 26, 26, 0.95);
+    }
+}
+
+/* Accessibilité */
+.logo:focus,
+.profile:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}

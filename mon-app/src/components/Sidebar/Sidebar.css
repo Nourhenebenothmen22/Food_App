@@ -1,0 +1,154 @@
+/* Sidebar.css */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #fff;
+    border-right: 1px solid #e0e0e0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 70px;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-options {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-option {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    margin: 0 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: #555;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sidebar-option:hover {
+    background-color: #f0f7ff;
+    color: #007bff;
+    transform: translateX(5px);
+}
+
+.sidebar-option.active {
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.sidebar-option img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-option:hover img {
+    transform: scale(1.1);
+}
+
+.sidebar-option.active img {
+    filter: brightness(0) invert(1);
+}
+
+.sidebar-option p {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Tablettes */
+@media screen and (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+    }
+}
+
+/* Petites tablettes */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+        padding-top: 60px;
+    }
+    
+    .sidebar-option {
+        justify-content: center;
+        padding: 0.8rem;
+        margin: 0 0.3rem;
+    }
+    
+    .sidebar-option p {
+        display: none;
+    }
+    
+    .sidebar-option img {
+        margin-right: 0;
+    }
+}
+
+/* Mobiles */
+@media screen and (max-width: 480px) {
+    .sidebar {
+        width: 60px;
+        padding-top: 55px;
+    }
+    
+    .sidebar-option {
+        padding: 0.7rem;
+        margin: 0 0.2rem;
+    }
+    
+    .sidebar-option img {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+    .sidebar {
+        background-color: #1a1a1a;
+        border-right-color: #333;
+    }
+    
+    .sidebar-option {
+        color: #e0e0e0;
+    }
+    
+    .sidebar-option:hover {
+        background-color: #1e3a5c;
+        color: #60a5fa;
+    }
+    
+    .sidebar-option.active {
+        background-color: #007bff;
+        color: white;
+    }
+}
+
+/* Scrollbar personnalisée */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
