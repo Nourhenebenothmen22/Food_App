@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
-import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext';
+import { toast } from 'react-toastify';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { getTotalCartAmount, cartItems, food_list } = useContext(StoreContext);
+  const navigate = useNavigate();
+
+  // Vérifier si l'utilisateur est connecté
+  const isLoggedIn = localStorage.getItem('user');
+  const user = isLoggedIn ? JSON.parse(isLoggedIn) : null;
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -15,7 +21,21 @@ function Navbar() {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-const { getTotalCartAmount, cartItems, food_list } = useContext(StoreContext);
+
+  const handleLogout = () => {
+    // Supprimer les données utilisateur du localStorage
+    localStorage.removeItem('user');
+    
+    // Supprimer les cookies
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+    // Rediriger vers la page d'accueil
+    navigate('/');
+    
+    // Fermer le menu mobile si ouvert
+    closeMenu();
+  };
+
   return (
     <nav className='navbar'>
       
@@ -70,19 +90,38 @@ const { getTotalCartAmount, cartItems, food_list } = useContext(StoreContext);
               className='basket_icon' 
               title="View cart"
             />
-<div className={getTotalCartAmount(cartItems, food_list) == 0 ? "" : 'dot'} title="Items in cart"></div>
+            <div className={getTotalCartAmount(cartItems, food_list) === 0 ? "" : 'dot'} title="Items in cart"></div>
           </Link>
         </div>
 
-        {/* Sign In Button */}
-        <Link to="/login">
-          <button 
-            className='sign_in_btn'
-            title="Sign in to your account"
-          >
-            Sign In
-          </button>
-        </Link>
+        {/* User Profile or Auth Buttons */}
+        {isLoggedIn ? (
+          <div className="user_section">
+            {/* User Welcome Message */}
+            <span className="user_welcome">
+              Hi, {user?.name?.split(' ')[0] || user?.email?.split('@')[0]}
+            </span>
+            
+            {/* Logout Button */}
+            <button 
+              className='logout_btn'
+              onClick={handleLogout}
+              title="Logout from your account"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          /* Sign In Button (when not logged in) */
+          <Link to="/login">
+            <button 
+              className='sign_in_btn'
+              title="Sign in to your account"
+            >
+              Sign In
+            </button>
+          </Link>
+        )}
 
         {/* Burger Menu for Mobile */}
         <button 
