@@ -97,26 +97,24 @@ REACT_APP_API_URL=http://localhost:5173/api/v1
 # Start development server
 npm start
 
-FOOD_APP/
+flavorfusion/
 ├── backend/
-│   ├── controllers/      # Route controllers
-│   ├── models/           # MongoDB models
-│   ├── routes/           # API routes
-│   ├── middleware/       # Custom middleware
-│   ├── config/           # Database & email config
-│   ├── uploads/          # Image storage
-│   ├── templates/        # Email templates
-│   ├── utils/            # Utility functions
-│   └── server.js         # Entry point
+│   ├── controllers/     # Route controllers
+│   ├── models/         # MongoDB models
+│   ├── routes/         # API routes
+│   ├── middleware/     # Custom middleware
+│   ├── config/         # Database & email config
+│   ├── uploads/        # Image storage
+│   ├── templates/      # Email templates
+│   ├── utils/          # Utility functions
+│   └── server.js       # Entry point
 ├── frontend/
-│   ├── public/           # Static files
+│   ├── public/         # Static files
 │   ├── src/
-│   │   ├── components/   # Reusable components
-│   │   ├── pages/        # Page components
-│   │   ├── context/      # React context
-│   │   ├── assets/       # Images & icons
-│   │   └── App.jsx       # Main app component
+│   │   ├── components/ # Reusable components
+│   │   ├── pages/      # Page components
+│   │   ├── context/    # React context
+│   │   ├── assets/     # Images & icons
+│   │   └── App.jsx     # Main app component
 │   └── package.json
 └── README.md
-
-
