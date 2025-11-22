@@ -113,10 +113,7 @@ function Login() {
     }
   };
 
-  // Fonction pour vérifier les cookies (debug)
-  const checkCookies = () => {
-    console.log('Cookies:', document.cookie);
-  };
+ 
 
   return (
     <div className="auth-container">
