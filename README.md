@@ -10,9 +10,9 @@ A modern, responsive food delivery application built with the MERN stack (MongoD
 
 ## 🚀 Live Demo
 
-**Frontend URL:** `http://localhost:3000`  
+**Frontend URL:** `http://localhost:5173`  
 **Backend API:** `http://localhost:5000`  
-**Admin Panel:** `http://localhost:3000/admin`
+**Admin Panel:** `http://localhost:5174`
 
 ## ✨ Features
 
@@ -92,30 +92,31 @@ npm install
 cp .env.example .env
 
 # Edit .env file:
-REACT_APP_API_URL=http://localhost:5000/api/v1
+REACT_APP_API_URL=http://localhost:5173/api/v1
 
 # Start development server
 npm start
 
-flavorfusion/
+FOOD_APP/
 ├── backend/
-│   ├── controllers/     # Route controllers
-│   ├── models/         # MongoDB models
-│   ├── routes/         # API routes
-│   ├── middleware/     # Custom middleware
-│   ├── config/         # Database & email config
-│   ├── uploads/        # Image storage
-│   ├── templates/      # Email templates
-│   ├── utils/          # Utility functions
-│   └── server.js       # Entry point
+│   ├── controllers/      # Route controllers
+│   ├── models/           # MongoDB models
+│   ├── routes/           # API routes
+│   ├── middleware/       # Custom middleware
+│   ├── config/           # Database & email config
+│   ├── uploads/          # Image storage
+│   ├── templates/        # Email templates
+│   ├── utils/            # Utility functions
+│   └── server.js         # Entry point
 ├── frontend/
-│   ├── public/         # Static files
+│   ├── public/           # Static files
 │   ├── src/
-│   │   ├── components/ # Reusable components
-│   │   ├── pages/      # Page components
-│   │   ├── context/    # React context
-│   │   ├── assets/     # Images & icons
-│   │   └── App.jsx     # Main app component
+│   │   ├── components/   # Reusable components
+│   │   ├── pages/        # Page components
+│   │   ├── context/      # React context
+│   │   ├── assets/       # Images & icons
+│   │   └── App.jsx       # Main app component
 │   └── package.json
 └── README.md
+
 
