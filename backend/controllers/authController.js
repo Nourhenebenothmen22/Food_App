@@ -152,6 +152,9 @@ exports.login = async (req, res) => {
 // ------------------------------------------------------
 // GET PROFILE CONTROLLER
 // ------------------------------------------------------
+// ------------------------------------------------------
+// GET PROFILE CONTROLLER
+// ------------------------------------------------------
 exports.getProfile = async (req, res) => {
     try {
         const id = req.params.id;
@@ -166,14 +169,16 @@ exports.getProfile = async (req, res) => {
             });
         }
 
-        // 3️⃣ Send back user profile data
+        // 3️⃣ Send back user profile data WITH image and phone
         return res.status(200).json({
             message: "Profile fetched successfully",
             user: {
                 id: user._id,
                 email: user.email,
                 name: user.name,
-                role: user.role
+                role: user.role,
+                phone: user.phone,
+                image: user.ImageProfile 
             }
         });
 
