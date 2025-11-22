@@ -1,36 +1,46 @@
 import { createContext, useEffect, useState } from "react";
-import { food_list } from "../assets/assets";
+import axios from "axios";
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-
   const [cartItems, setCartItems] = useState({});
+  const [foodList, setFoodList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 👉 Récupérer les aliments depuis l'API
+  const fetchFoodList = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:5000/api/v1/food"); 
+      setFoodList(response.data);
+      setError(null);
+    } catch (err) {
+      console.error("Erreur lors du chargement des aliments:", err);
+      setError("Erreur lors du chargement des aliments");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFoodList();
+  }, []);
 
   // 👉 Ajouter un item au panier
   const addToCart = (itemId) => {
-    setCartItems((prev) => {
-      // Si l'item existe déjà, on incrémente
-      if (prev[itemId]) {
-        return {
-          ...prev,
-          [itemId]: prev[itemId] + 1,
-        };
-      }
-      // Sinon on l'ajoute avec quantité 1
-      return {
-        ...prev,
-        [itemId]: 1,
-      };
-    });
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: (prev[itemId] || 0) + 1,
+    }));
   };
 
   // 👉 Retirer un item
   const removeFromCart = (itemId) => {
     setCartItems((prev) => {
-      if (!prev[itemId]) return prev; // sécurité
+      if (!prev[itemId]) return prev;
 
-      // Si quantité > 1, décrémenter
       if (prev[itemId] > 1) {
         return {
           ...prev,
@@ -38,33 +48,33 @@ const StoreContextProvider = (props) => {
         };
       }
 
-      // Si quantité = 1 → suppression de l'objet
       const updatedCart = { ...prev };
       delete updatedCart[itemId];
       return updatedCart;
     });
   };
- const getTotalCartAmount = () => {
+
+  // 👉 Calculer le total du panier
+  const getTotalCartAmount = () => {
     let totalAmount = 0;
-    food_list.forEach((item) => {
-        if (cartItems[item._id] > 0) {
-            totalAmount += item.price * cartItems[item._id];
-        }
+    foodList.forEach((item) => {
+      if (cartItems[item._id] > 0) {
+        totalAmount += item.price * cartItems[item._id];
+      }
     });
     return totalAmount;
-};
-
-  useEffect(()=>{
-console.log(cartItems)
-  },[cartItems])
+  };
 
   // Les valeurs à partager aux autres composants
   const contextValue = {
-    food_list,
+    food_list: foodList,
     cartItems,
     addToCart,
     removeFromCart,
-    getTotalCartAmount
+    getTotalCartAmount,
+    loading,
+    error,
+    refetchFoodList: fetchFoodList // Pour rafraîchir les données si besoin
   };
 
   return (
