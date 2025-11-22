@@ -6,23 +6,25 @@ const otpTemplate = require("../templates/otpTemplate");
 const generateToken = require("../utils/generateToken");
 const welcomeTemplate = require("../templates/welcomeTemplate");
 
-// ---------------- REGISTER ----------------
+// ------------------------------------------------------
+// REGISTER CONTROLLER
+// ------------------------------------------------------
 exports.register = async (req, res) => {
     try {
         const { name, email, phone, password, role } = req.body;
 
-        // 1️⃣ Check if email already exists
+        // 1️⃣ Check if the email is already registered
         const emailExist = await User.findOne({ email });
         if (emailExist)
             return res.status(400).json({ msg: "Email already exists" });
 
-        // 2️⃣ Hash password
+        // 2️⃣ Hash the password
         const hash = await bcrypt.hash(password, 10);
 
-        // 3️⃣ Generate OTP
+        // 3️⃣ Generate a 6-digit OTP code
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // 4️⃣ Create user
+        // 4️⃣ Create a new user in the database
         const user = await User.create({
             name,
             email,
@@ -31,10 +33,10 @@ exports.register = async (req, res) => {
             role: role || "user",
             isAccountVerified: false,
             otp,
-            otpExpire: Date.now() + 5 * 60 * 1000 // 5 minutes
+            otpExpire: Date.now() + 5 * 60 * 1000 // OTP valid for 5 min
         });
 
-        // 5️⃣ Send OTP email
+        // 5️⃣ Send OTP to the user's email
         await transporter.sendMail({
             from: "noreply@test.com",
             to: email,
@@ -49,33 +51,37 @@ exports.register = async (req, res) => {
     }
 };
 
-// ---------------- VERIFY OTP ----------------
+// ------------------------------------------------------
+// VERIFY OTP CONTROLLER
+// ------------------------------------------------------
 exports.verifyOtp = async (req, res) => {
     try {
         const { email, otp } = req.body;
 
-        // Check if user exists
+        // 1️⃣ Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Check if OTP matches
+        // 2️⃣ Validate OTP
         if (user.otp !== otp) {
             return res.status(400).json({ message: "Incorrect OTP" });
         }
 
-        // Check OTP expiration
+        // 3️⃣ Check OTP expiration
         if (user.otpExpire < Date.now()) {
             return res.status(400).json({ message: "OTP expired" });
         }
 
-        // OTP is valid → verify account and remove OTP
-        user.isAccountVerified = true; // ✅
+        // 4️⃣ Mark the account as verified and remove OTP fields
+        user.isAccountVerified = true;
         user.otp = null;
         user.otpExpire = null;
 
         await user.save();
+
+        // 5️⃣ Send a welcome email
         await transporter.sendMail({
             from: "noreply@test.com",
             to: email,
@@ -91,40 +97,42 @@ exports.verifyOtp = async (req, res) => {
     }
 };
 
-// ---------------- LOGIN ----------------
+// ------------------------------------------------------
+// LOGIN CONTROLLER
+// ------------------------------------------------------
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Check if user exists
+        // 1️⃣ Check if the user exists (+password is included explicitly)
         const existUser = await User.findOne({ email }).select('+password');
         if (!existUser) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Check if account is verified
+        // 2️⃣ Ensure the account is verified
         if (!existUser.isAccountVerified) {
             return res.status(403).json({ message: "Account not verified. Please check your email." });
         }
 
-        // Check password
+        // 3️⃣ Compare submitted password with the hashed password
         const isMatch = await bcrypt.compare(password, existUser.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Incorrect password" });
         }
 
-        // Generate JWT token
+        // 4️⃣ Generate a JWT token
         const token = await generateToken(existUser);
 
-        // Send token in a secure cookie
+        // 5️⃣ Store the token in an HTTP-only cookie
         res.cookie('token', token, {
-            httpOnly: true, // accessible only by server
-            secure: process.env.NODE_ENV === 'production', // secure in production
+            httpOnly: true,  
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
             maxAge: 60 * 60 * 1000 // 1 hour
         });
 
-        // JSON response (optional)
+        // 6️⃣ Return user info (without password)
         return res.status(200).json({
             message: "Login successful",
             user: {
@@ -138,5 +146,42 @@ exports.login = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Server error", error });
+    }
+};
+
+// ------------------------------------------------------
+// GET PROFILE CONTROLLER
+// ------------------------------------------------------
+exports.getProfile = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // 1️⃣ Fetch user by ID (password excluded)
+        const user = await User.findById(id).select("-password");
+
+        // 2️⃣ If user does not exist → return error
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        // 3️⃣ Send back user profile data
+        return res.status(200).json({
+            message: "Profile fetched successfully",
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: "Server error",
+            error
+        });
     }
 };
