@@ -42,11 +42,11 @@ function Login() {
 
     try {
       const response = await axios.post(`${url}/login`, data, {
-        withCredentials: true // Important pour les cookies
+        withCredentials: true 
       });
       
       if (response.data.message === "Login successful") {
-        // Stocker les données utilisateur dans localStorage
+      
         const userData = {
           id: response.data.user.id,
           email: response.data.user.email,
@@ -71,9 +71,6 @@ function Login() {
           email: "",
           password: ""
         });
-
-        console.log('User logged in:', userData);
-        console.log('Cookies should be set automatically');
 
       } else {
         toast.error(response.data.message || 'Login failed', {

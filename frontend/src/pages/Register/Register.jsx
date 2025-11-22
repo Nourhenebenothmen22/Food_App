@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import './Register.css';
+
+const url = "http://localhost:5000/api/v1/auth";
 
 function Register() {
   const [formData, setFormData] = useState({
-    fullName: '',
+    name: '', // Changé de fullName à name
     email: '',
     password: '',
     confirmPassword: '',
     role: 'user'
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -26,9 +32,96 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Register data:', formData);
+    setIsLoading(true);
+
+    // Validation
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      toast.error('Please fill in all fields', {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match', {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error('Password must be at least 6 characters long', {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      console.log('Sending registration data:', formData);
+      
+      const response = await axios.post(`${url}/register`, formData, {
+        withCredentials: true 
+      });
+
+      console.log('Registration successful:', response.data);
+      
+      toast.success('Registration successful!', {
+        position: "top-right",
+        autoClose: 2000,
+        onClose: () => {
+          navigate('/login');
+        }
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        role: 'user'
+      });
+
+    } catch (error) {
+      console.error('Full registration error:', error);
+      console.error('Error response:', error.response);
+      console.error('Error data:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      
+      // Meilleure gestion d'erreur
+      if (error.response?.data?.error) {
+        // Afficher l'erreur spécifique de validation MongoDB
+        toast.error(error.response.data.error, {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message, {
+          position: "top-right",
+          autoClose: 4000,
+        });
+      } else if (error.response?.status === 500) {
+        toast.error('Server error. Please try again later.', {
+          position: "top-right",
+          autoClose: 4000,
+        });
+      } else {
+        toast.error('Registration failed. Please check your connection.', {
+          position: "top-right",
+          autoClose: 4000,
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,10 +138,10 @@ function Register() {
             <label>Full Name</label>
             <input
               type="text"
-              name="fullName"
+              name="name"
               className="form-input"
               placeholder="Enter your full name"
-              value={formData.fullName}
+              value={formData.name}
               onChange={handleChange}
               required
             />
@@ -98,6 +191,7 @@ function Register() {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                minLength="6"
               />
               <button
                 type="button"
@@ -119,11 +213,16 @@ function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              minLength="6"
             />
           </div>
 
-          <button type="submit" className="auth-btn">
-            Create Account
+          <button 
+            type="submit" 
+            className="auth-btn"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
