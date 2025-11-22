@@ -13,6 +13,8 @@ function Navbar() {
   // Vérifier si l'utilisateur est connecté
   const isLoggedIn = localStorage.getItem('user');
   const user = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const [showDropdown, setShowDropdown] = useState(false);
+
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -94,34 +96,45 @@ function Navbar() {
           </Link>
         </div>
 
-        {/* User Profile or Auth Buttons */}
-        {isLoggedIn ? (
-          <div className="user_section">
-            {/* User Welcome Message */}
-            <span className="user_welcome">
-              Hi, {user?.name?.split(' ')[0] || user?.email?.split('@')[0]}
-            </span>
-            
-            {/* Logout Button */}
-            <button 
-              className='logout_btn'
-              onClick={handleLogout}
-              title="Logout from your account"
-            >
-              Logout
-            </button>
-          </div>
-        ) : (
-          /* Sign In Button (when not logged in) */
-          <Link to="/login">
-            <button 
-              className='sign_in_btn'
-              title="Sign in to your account"
-            >
-              Sign In
-            </button>
-          </Link>
-        )}
+       {/* User Profile or Auth Buttons */}
+{isLoggedIn ? (
+  <div className="user_dropdown_container">
+    
+    {/* User Icon Button */}
+    <button 
+      className="user_icon_btn"
+      onClick={() => setShowDropdown(prev => !prev)}
+      title="User Menu"
+    >
+      👤
+    </button>
+
+    {/* Dropdown Menu */}
+    {showDropdown && (
+      <div className="dropdown_menu">
+        <span style={{ padding: "8px 0", fontWeight: "bold" }}>
+          Hi, {user?.name?.split(' ')[0] || user?.email?.split('@')[0]}
+        </span>
+
+        <button onClick={() => navigate('/profile')}>
+          Profile
+        </button>
+
+        <button onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+    )}
+
+  </div>
+) : (
+  <Link to="/login">
+    <button className='sign_in_btn' title="Sign in to your account">
+      Sign In
+    </button>
+  </Link>
+)}
+
 
         {/* Burger Menu for Mobile */}
         <button 
