@@ -178,7 +178,8 @@ exports.getProfile = async (req, res) => {
                 name: user.name,
                 role: user.role,
                 phone: user.phone,
-                image: user.ImageProfile 
+                image: user.ImageProfile,
+                cart:user.cart 
             }
         });
 
