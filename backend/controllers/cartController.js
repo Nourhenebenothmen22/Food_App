@@ -38,5 +38,36 @@ const addToCart = async (req, res) => {
     return res.status(500).json({ success: false, message: "Error adding to cart" });
   }
 };
+const removeFromCart = async (req, res) => {
+  try {
+    const { userId, itemId } = req.body;
+    if (!userId || !itemId) {
+      return res.status(400).json({ success: false, message: "User ID and Item ID are required" });
+    }
 
-module.exports = { addToCart };
+    const userData = await User.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const cartData = userData.cart || {};
+
+    if (cartData[itemId]) {
+      cartData[itemId] -= 1;
+      if (cartData[itemId] === 0) delete cartData[itemId];
+    } else {
+      return res.status(400).json({ success: false, message: "Item not in cart" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { cart: cartData }, { new: true });
+
+    return res.json({ success: true, message: "Item removed from cart", cart: updatedUser.cart });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Error removing from cart" });
+  }
+};
+
+
+module.exports = { addToCart ,removeFromCart };
