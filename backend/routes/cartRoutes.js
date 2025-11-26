@@ -1,11 +1,9 @@
-// Dans votre fichier routes/cartRoutes.js
 const express = require('express');
-const { addToCart, removeFromCart, getCart } = require('../controllers/cartController');
-const authMiddleware=require('../middlewares/authMiddleware')
+const { addToCart} = require('../controllers/cartController');
 const router = express.Router();
 
-router.post('/add',authMiddleware, addToCart);
-router.post('/remove',authMiddleware, removeFromCart);
-router.get('/get',authMiddleware, getCart);
+// Ajouter / Retirer via POST
+router.post('/add', addToCart);
+
 
 module.exports = router;
