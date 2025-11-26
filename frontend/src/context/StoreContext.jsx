@@ -4,12 +4,40 @@ import axios from "axios";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const [cartItems, setCartItems] = useState({});
+  // ---------------------------------------------------
+  // 1️⃣ Charger le panier depuis localStorage au démarrage
+  // ---------------------------------------------------
+  const getInitialCart = () => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : {};
+  };
+
+  const [cartItems, setCartItems] = useState(getInitialCart());
   const [foodList, setFoodList] = useState([]);
+  const [orderInfo, setOrderInfo] = useState(
+    JSON.parse(localStorage.getItem("orderInfo")) || {}
+  );
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 👉 Récupérer les aliments depuis l'API
+  // ---------------------------------------------------
+  // 2️⃣ Sauvegarder le panier à chaque mise à jour
+  // ---------------------------------------------------
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  // ---------------------------------------------------
+  // 3️⃣ Sauvegarder les infos de commande
+  // ---------------------------------------------------
+  useEffect(() => {
+    localStorage.setItem("orderInfo", JSON.stringify(orderInfo));
+  }, [orderInfo]);
+
+  // ---------------------------------------------------
+  // 4️⃣ Récupérer les aliments depuis l'API
+  // ---------------------------------------------------
   const fetchFoodList = async () => {
     try {
       setLoading(true);
@@ -28,7 +56,9 @@ const StoreContextProvider = (props) => {
     fetchFoodList();
   }, []);
 
-  // 👉 Ajouter un item au panier
+  // ---------------------------------------------------
+  // 5️⃣ Ajouter un item au panier
+  // ---------------------------------------------------
   const addToCart = (itemId) => {
     setCartItems((prev) => ({
       ...prev,
@@ -36,7 +66,9 @@ const StoreContextProvider = (props) => {
     }));
   };
 
-  // 👉 Retirer un item
+  // ---------------------------------------------------
+  // 6️⃣ Retirer un item du panier
+  // ---------------------------------------------------
   const removeFromCart = (itemId) => {
     setCartItems((prev) => {
       if (!prev[itemId]) return prev;
@@ -54,7 +86,9 @@ const StoreContextProvider = (props) => {
     });
   };
 
-  // 👉 Calculer le total du panier
+  // ---------------------------------------------------
+  // 7️⃣ Total du panier
+  // ---------------------------------------------------
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     foodList.forEach((item) => {
@@ -65,7 +99,22 @@ const StoreContextProvider = (props) => {
     return totalAmount;
   };
 
-  // Les valeurs à partager aux autres composants
+  // ---------------------------------------------------
+  // 8️⃣ Sauvegarder les infos de la commande
+  // ---------------------------------------------------
+  const saveOrderInfo = (info) => {
+    setOrderInfo(info);
+  };
+
+  // ---------------------------------------------------
+  // 9️⃣ Vider le panier après commande
+  // ---------------------------------------------------
+  const clearCart = () => {
+    setCartItems({});
+    localStorage.removeItem("cartItems");
+  };
+
+  // ---------------------------------------------------
   const contextValue = {
     food_list: foodList,
     cartItems,
@@ -74,7 +123,9 @@ const StoreContextProvider = (props) => {
     getTotalCartAmount,
     loading,
     error,
-    refetchFoodList: fetchFoodList // Pour rafraîchir les données si besoin
+    orderInfo,
+    saveOrderInfo,
+    clearCart,
   };
 
   return (
