@@ -68,6 +68,30 @@ const removeFromCart = async (req, res) => {
     return res.status(500).json({ success: false, message: "Error removing from cart" });
   }
 };
+const getCart = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
+    // Find the user
+    const userData = await User.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Get the cart, default to empty object
+    const cartData = userData.cart || {};
+
+    return res.json({ success: true, cart: cartData });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Error fetching cart" });
+  }
+};
 
 
-module.exports = { addToCart ,removeFromCart };
+module.exports = { addToCart ,removeFromCart,getCart};
