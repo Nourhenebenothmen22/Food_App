@@ -32,11 +32,17 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    
+    // ✅ AJOUTER LE CHAMP CART ICI
+    cart: {
+        type: Object,
+        default: {}  // Panier vide par défaut
+    },
+    
     otp: String,
-  otpExpire: Date,
-
-  resetOtp: String,
-  resetOtpExpire: Date
+    otpExpire: Date,
+    resetOtp: String,
+    resetOtpExpire: Date
 }, { timestamps: true }); 
 
 module.exports = mongoose.model('User', userSchema);
