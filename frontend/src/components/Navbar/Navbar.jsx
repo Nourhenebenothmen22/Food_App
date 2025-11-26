@@ -1,20 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
 import { StoreContext } from '../../context/StoreContext';
-import { toast } from 'react-toastify';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { getTotalCartAmount, cartItems, food_list } = useContext(StoreContext);
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
-  // Vérifier si l'utilisateur est connecté
-  const isLoggedIn = localStorage.getItem('user');
-  const user = isLoggedIn ? JSON.parse(isLoggedIn) : null;
-  const [showDropdown, setShowDropdown] = useState(false);
-
+  const { 
+    currentUser, 
+    getTotalCartItems, 
+    handleUserLogout,
+    syncCartWithUser 
+  } = useContext(StoreContext);
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -22,9 +22,13 @@ function Navbar() {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+    setShowDropdown(false);
   };
 
   const handleLogout = () => {
+    // Utiliser la fonction de déconnexion du contexte
+    handleUserLogout();
+    
     // Supprimer les données utilisateur du localStorage
     localStorage.removeItem('user');
     
@@ -38,12 +42,31 @@ function Navbar() {
     closeMenu();
   };
 
+  // Synchroniser le panier avec l'utilisateur actuel
+  useEffect(() => {
+    syncCartWithUser();
+  }, []);
+
+  // Fermer le dropdown si on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showDropdown && !event.target.closest('.user_dropdown_container')) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showDropdown]);
+
   return (
     <nav className='navbar'>
       
       {/* LEFT SECTION - Logo */}
       <div className='navbar_left'>
-        <Link to="/">
+        <Link to="/" onClick={closeMenu}>
           <img 
             src={assets.logo} 
             alt="Company Logo" 
@@ -75,66 +98,87 @@ function Navbar() {
         
         {/* Search Icon */}
         <div className='search_container'>
-          <img 
-            src={assets.search_icon} 
-            alt="Search" 
-            className='search_icon' 
+          <button 
+            className='icon_btn' 
             title="Search products"
-          />
+            onClick={closeMenu}
+          >
+            <img 
+              src={assets.search_icon} 
+              alt="Search" 
+              className='search_icon' 
+            />
+          </button>
         </div>
 
         {/* Shopping Basket */}
         <div className='basket_container'>
-          <Link to="/cart">
-            <img 
-              src={assets.basket_icon} 
-              alt="Shopping Basket" 
-              className='basket_icon' 
-              title="View cart"
-            />
-            <div className={getTotalCartAmount(cartItems, food_list) === 0 ? "" : 'dot'} title="Items in cart"></div>
+          <Link to="/cart" onClick={closeMenu}>
+            <button className='icon_btn' title="View cart">
+              <img 
+                src={assets.basket_icon} 
+                alt="Shopping Basket" 
+                className='basket_icon' 
+              />
+              <div className={`dot ${getTotalCartItems() > 0 ? '' : 'hidden'}`} 
+                   title={`${getTotalCartItems()} items in cart`}>
+              </div>
+            </button>
           </Link>
         </div>
 
-       {/* User Profile or Auth Buttons */}
-{isLoggedIn ? (
-  <div className="user_dropdown_container">
-    
-    {/* User Icon Button */}
-    <button 
-      className="user_icon_btn"
-      onClick={() => setShowDropdown(prev => !prev)}
-      title="User Menu"
-    >
-      👤
-    </button>
+        {/* User Profile or Auth Buttons */}
+        {currentUser ? (
+          <div className="user_dropdown_container">
+            
+            {/* User Icon Button */}
+            <button 
+              className="user_icon_btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDropdown(prev => !prev);
+              }}
+              title="User Menu"
+            >
+              👤
+            </button>
 
-    {/* Dropdown Menu */}
-    {showDropdown && (
-      <div className="dropdown_menu">
-        <span style={{ padding: "8px 0", fontWeight: "bold" }}>
-          Hi, {user?.name?.split(' ')[0] || user?.email?.split('@')[0]}
-        </span>
+            {/* Dropdown Menu */}
+            {showDropdown && (
+              <div className="dropdown_menu">
+                <span>
+                  Hi, {currentUser?.name?.split(' ')[0] || currentUser?.email?.split('@')[0]}
+                </span>
 
-        <button onClick={() => navigate('/profile')}>
-          Profile
-        </button>
+                <button onClick={() => {
+                  navigate('/profile');
+                  setShowDropdown(false);
+                  closeMenu();
+                }}>
+                  📱 Profile
+                </button>
 
-        <button onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-    )}
+                <button onClick={() => {
+                  navigate('/orders');
+                  setShowDropdown(false);
+                  closeMenu();
+                }}>
+                  📦 My Orders
+                </button>
 
-  </div>
-) : (
-  <Link to="/login">
-    <button className='sign_in_btn' title="Sign in to your account">
-      Sign In
-    </button>
-  </Link>
-)}
-
+                <button onClick={handleLogout}>
+                  🚪 Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link to="/login" onClick={closeMenu}>
+            <button className='sign_in_btn' title="Sign in to your account">
+              Sign In
+            </button>
+          </Link>
+        )}
 
         {/* Burger Menu for Mobile */}
         <button 
@@ -142,7 +186,7 @@ function Navbar() {
           onClick={handleMenuToggle}
           title="Toggle navigation menu"
         >
-          ☰
+          {isMenuOpen ? '✕' : '☰'}
         </button>
       </div>
     </nav>
