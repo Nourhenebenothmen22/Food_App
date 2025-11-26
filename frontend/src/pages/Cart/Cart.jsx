@@ -22,7 +22,8 @@ function Cart() {
                     if (cartItems[item._id] > 0) {
                         return (
                             <div key={item._id} className='cart-item'>
-                                <img src={item.image} alt={item.name} />
+                                <img src={`http://localhost:5000/images/${item.image}`} alt={item.name} />
+
                                 <div className='item-details'>
                                     <p className='item-name'>{item.name}</p>
                                     <p className='item-price'>${item.price}</p>
