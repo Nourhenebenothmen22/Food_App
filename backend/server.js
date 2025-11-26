@@ -85,6 +85,7 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/api/v1/auth', require('./routes/authRoutes'));
 app.use('/api/v1/food', require('./routes/FoodRoutes'));
+app.use('/api/v1/cart', require('./routes/cartRoutes'));
 
 // ------------------------- ERROR HANDLING -------------------------
 app.use((req, res) => {
