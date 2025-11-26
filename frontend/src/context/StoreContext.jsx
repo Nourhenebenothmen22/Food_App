@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+
+ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
 export const StoreContext = createContext(null);
@@ -28,18 +29,24 @@ const StoreContextProvider = (props) => {
   // ---------------------------------------------------
   // 1️⃣ Charger le panier au démarrage
   // ---------------------------------------------------
-  const getInitialCart = () => {
-    const user = getCurrentUser();
-    
-    if (!user) {
-      // Utilisateur déconnecté → panier vide
-      return {};
-    }
+  const getInitialCart = async () => {
+  const user = getCurrentUser();
+  if (!user) return {};
 
-    // Utilisateur connecté → charger son panier spécifique
-    const savedCart = localStorage.getItem(`cartItems_${user._id || user.id}`);
-    return savedCart ? JSON.parse(savedCart) : {};
-  };
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/v1/cart/get?userId=${user._id || user.id}`
+    );
+    if (response.data.success) {
+      return response.data.cart;
+    }
+  } catch (err) {
+    console.error("Erreur getInitialCart:", err);
+  }
+
+  return {}; // fallback si erreur
+};
+
 
   const [cartItems, setCartItems] = useState(getInitialCart());
   const [foodList, setFoodList] = useState([]);
@@ -134,39 +141,50 @@ const StoreContextProvider = (props) => {
   // ---------------------------------------------------
   // 6️⃣ Fonctions du panier avec vérification de connexion
   // ---------------------------------------------------
-  const addToCart = (itemId) => {
-    // Vérifier si l'utilisateur est connecté
-    if (!userId) {
-      alert("Veuillez vous connecter pour ajouter des articles au panier");
-      return false;
+  const addToCart = async (itemId) => {
+  if (!userId) {
+    alert("Veuillez vous connecter pour ajouter des articles au panier");
+    return false;
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/v1/cart/add",
+      { userId, itemId },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    if (response.data.success) {
+      setCartItems(response.data.cart);
+      return true;
     }
+  } catch (err) {
+    console.error("Erreur addToCart:", err);
+    return false;
+  }
+};
 
-    setCartItems((prev) => ({
-      ...prev,
-      [itemId]: (prev[itemId] || 0) + 1,
-    }));
-    return true;
-  };
 
-  const removeFromCart = (itemId) => {
-    if (!userId) return false;
+  const removeFromCart = async (itemId) => {
+  if (!userId) return false;
 
-    setCartItems((prev) => {
-      if (!prev[itemId]) return prev;
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/v1/cart/remove",
+      { userId, itemId },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
-      if (prev[itemId] > 1) {
-        return {
-          ...prev,
-          [itemId]: prev[itemId] - 1,
-        };
-      }
+    if (response.data.success) {
+      setCartItems(response.data.cart);
+      return true;
+    }
+  } catch (err) {
+    console.error("Erreur removeFromCart:", err);
+    return false;
+  }
+};
 
-      const updatedCart = { ...prev };
-      delete updatedCart[itemId];
-      return updatedCart;
-    });
-    return true;
-  };
 
   const getTotalCartAmount = () => {
     if (!userId) return 0;
@@ -275,3 +293,30 @@ const StoreContextProvider = (props) => {
 };
 
 export default StoreContextProvider;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const clearCartAfterOrder = () => {
+    setCartItems({});
+    if (userId) {
+      localStorage.removeItem(`cartItems_${userId}`);
+    }
+  };
