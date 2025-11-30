@@ -155,19 +155,19 @@ function Navbar() {
                   setShowDropdown(false);
                   closeMenu();
                 }}>
-                  📱 Profile
+                 Profile
                 </button>
 
                 <button onClick={() => {
-                  navigate('/orders');
+                  navigate('/order');
                   setShowDropdown(false);
                   closeMenu();
                 }}>
-                  📦 My Orders
+                  My Orders
                 </button>
 
                 <button onClick={handleLogout}>
-                  🚪 Logout
+                 Logout
                 </button>
               </div>
             )}
