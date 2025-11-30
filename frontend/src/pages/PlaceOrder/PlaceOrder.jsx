@@ -3,6 +3,8 @@ import './PlaceOrder.css'
 import { StoreContext } from '../../context/StoreContext'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function PlaceOrder() {
   const { getTotalCartAmount, cartItems, food_list, userId, clearCart } = useContext(StoreContext)
@@ -47,7 +49,7 @@ function PlaceOrder() {
     e.preventDefault()
     
     if (totalItems === 0) {
-      alert('Your cart is empty!')
+      toast.error('Your cart is empty!')
       return
     }
 
@@ -56,7 +58,7 @@ function PlaceOrder() {
     const missingFields = requiredFields.filter(field => !formData[field])
     
     if (missingFields.length > 0) {
-      alert(`Please fill in all required fields: ${missingFields.join(', ')}`)
+      toast.error(`Please fill in all required fields: ${missingFields.join(', ')}`)
       return
     }
 
@@ -100,38 +102,50 @@ function PlaceOrder() {
         // Handle different payment methods
         if (paymentMethod === 'card' && response.data.checkoutUrl) {
           // Redirect to Stripe checkout
-          window.location.href = response.data.checkoutUrl
+          toast.info('Redirecting to payment...', { autoClose: 2000 })
+          setTimeout(() => {
+            window.location.href = response.data.checkoutUrl
+          }, 2000)
         } else {
           // For cash on delivery or other methods
-          alert('Order placed successfully!')
-          clearCart()
-          navigate('/success', { 
-            state: { 
-              orderId: response.data.order._id,
-              orderDetails: response.data.order
-            }
+          const toastId = toast.success('Order placed successfully!', {
+            autoClose: 2000,
+            hideProgressBar: false,
           })
+          
+          clearCart()
+          
+          // Redirection après que le toast soit terminé
+          setTimeout(() => {
+            // Fermer le toast explicitement avant la navigation
+            toast.dismiss(toastId)
+            navigate('/success', { 
+              state: { 
+                orderId: response.data.order._id,
+                orderDetails: response.data.order
+              }
+            })
+          }, 2000)
         }
       } else {
-        alert('Failed to place order. Please try again.')
+        toast.error('Failed to place order. Please try again.')
       }
 
     } catch (error) {
       console.error('Error placing order:', error)
       if (error.response) {
         console.error('Server response:', error.response.data)
-        alert(`Error: ${error.response.data.message || 'Failed to place order'}`)
+        toast.error(`Error: ${error.response.data.message || 'Failed to place order'}`)
       } else if (error.request) {
-        alert('Network error. Please check your connection.')
+        toast.error('Network error. Please check your connection.')
       } else {
-        alert('An unexpected error occurred.')
+        toast.error('An unexpected error occurred.')
       }
     } finally {
       setLoading(false)
     }
   }
 
-  // Update payment options in your JSX
   const paymentOptions = [
     { value: 'cash', label: 'Cash on Delivery' },
     { value: 'card', label: 'Credit Card' },
