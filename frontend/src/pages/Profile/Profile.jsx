@@ -172,7 +172,7 @@ function Profile() {
               </button>
 
               <button
-                onClick={() => navigate("/orders")}
+                onClick={() => navigate("/order")}
                 className="orders-btn"
               >
                 My Orders
