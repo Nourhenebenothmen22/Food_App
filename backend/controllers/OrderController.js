@@ -60,5 +60,31 @@ const placeOrder = async (req, res) => {
         res.status(500).json({ message: "Internal server error", error });
     }
 };
+const getOrderById = async (req, res) => {
+    try {
+        const { orderId } = req.params;
 
-module.exports = { placeOrder };
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Order not found" 
+            });
+        }
+
+        res.json({
+            success: true,
+            order: order
+        });
+
+    } catch (error) {
+        console.error("Error fetching order:", error);
+        res.status(500).json({ 
+            success: false,
+            message: "Internal server error" 
+        });
+    }
+};
+
+module.exports = { placeOrder, getOrderById };
+
