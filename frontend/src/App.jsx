@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Layout from "./pages/Layout";
 import Profile from "./pages/Profile/Profile";
+import Success from "./pages/Success/Success";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         {/* Routes sans Layout (pas de navbar/footer) */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
     </div>
   );
