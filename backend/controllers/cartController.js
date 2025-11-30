@@ -70,7 +70,7 @@ const removeFromCart = async (req, res) => {
 };
 const getCart = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params; // Maintenant dans les params
 
     if (!userId) {
       return res.status(400).json({ success: false, message: "User ID is required" });
