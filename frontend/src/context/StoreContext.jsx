@@ -5,14 +5,14 @@ export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
   // ---------------------------------------------------
-  // 🔐 Récupérer l'utilisateur connecté
+  // 🔐 Get logged in user
   // ---------------------------------------------------
   const getCurrentUser = () => {
     try {
       const userData = localStorage.getItem("user");
       return userData ? JSON.parse(userData) : null;
     } catch (error) {
-      console.error("Erreur lors de la récupération de l'utilisateur:", error);
+      console.error("Error retrieving user:", error);
       return null;
     }
   };
@@ -33,7 +33,7 @@ const StoreContextProvider = (props) => {
   const [error, setError] = useState(null);
 
   // ---------------------------------------------------
-  // 1️⃣ Charger le panier initial
+  // 1️⃣ Load initial cart
   // ---------------------------------------------------
   const getInitialCart = async (userId) => {
     if (!userId) return {};
@@ -46,13 +46,13 @@ const StoreContextProvider = (props) => {
         return response.data.cart;
       }
     } catch (err) {
-      console.error("Erreur getInitialCart:", err);
+      console.error("Error getInitialCart:", err);
     }
     return {};
   };
 
   // ---------------------------------------------------
-  // 2️⃣ Charger les données au démarrage
+  // 2️⃣ Load data on startup
   // ---------------------------------------------------
   useEffect(() => {
     const initializeData = async () => {
@@ -74,37 +74,37 @@ const StoreContextProvider = (props) => {
   }, []);
 
   // ---------------------------------------------------
-  // 3️⃣ Synchronisation avec les changements d'utilisateur
+  // 3️⃣ Sync with user changes
   // ---------------------------------------------------
   useEffect(() => {
     const checkUserChange = async () => {
       const user = getCurrentUser();
       const newUserId = getUserId();
 
-      // Si l'utilisateur a changé
+      // If user changed
       if (newUserId !== userId) {
         setCurrentUser(user);
         setUserId(newUserId);
 
         if (newUserId) {
-          // Nouvel utilisateur connecté → charger son panier
+          // New user logged in → load their cart
           const cart = await getInitialCart(newUserId);
           setCartItems(cart);
         } else {
-          // Utilisateur déconnecté → vider le panier visuel
+          // User logged out → clear visual cart
           setCartItems({});
         }
       }
     };
 
-    // Vérifier les changements toutes les 2 secondes
+    // Check for changes every 2 seconds
     const interval = setInterval(checkUserChange, 2000);
 
     return () => clearInterval(interval);
   }, [userId]);
 
   // ---------------------------------------------------
-  // 4️⃣ Sauvegarder le panier dans localStorage
+  // 4️⃣ Save cart to localStorage
   // ---------------------------------------------------
   useEffect(() => {
     if (userId && Object.keys(cartItems).length > 0) {
@@ -113,14 +113,14 @@ const StoreContextProvider = (props) => {
   }, [cartItems, userId]);
 
   // ---------------------------------------------------
-  // 5️⃣ Sauvegarder les infos de commande
+  // 5️⃣ Save order info
   // ---------------------------------------------------
   useEffect(() => {
     localStorage.setItem("orderInfo", JSON.stringify(orderInfo));
   }, [orderInfo]);
 
   // ---------------------------------------------------
-  // 6️⃣ Récupérer les aliments
+  // 6️⃣ Fetch food items
   // ---------------------------------------------------
   const fetchFoodList = async () => {
     try {
@@ -129,19 +129,19 @@ const StoreContextProvider = (props) => {
       setFoodList(response.data);
       setError(null);
     } catch (err) {
-      console.error("Erreur lors du chargement des aliments:", err);
-      setError("Erreur lors du chargement des aliments");
+      console.error("Error loading food items:", err);
+      setError("Error loading food items");
     } finally {
       setLoading(false);
     }
   };
 
   // ---------------------------------------------------
-  // 7️⃣ Fonctions du panier
+  // 7️⃣ Cart functions
   // ---------------------------------------------------
   const addToCart = async (itemId) => {
     if (!userId) {
-      alert("Veuillez vous connecter pour ajouter des articles au panier");
+      alert("Please log in to add items to cart");
       return false;
     }
 
@@ -157,7 +157,7 @@ const StoreContextProvider = (props) => {
         return true;
       }
     } catch (err) {
-      console.error("Erreur addToCart:", err);
+      console.error("Error addToCart:", err);
       return false;
     }
   };
@@ -177,7 +177,7 @@ const StoreContextProvider = (props) => {
         return true;
       }
     } catch (err) {
-      console.error("Erreur removeFromCart:", err);
+      console.error("Error removeFromCart:", err);
       return false;
     }
   };
@@ -201,7 +201,7 @@ const StoreContextProvider = (props) => {
   };
 
   // ---------------------------------------------------
-  // 8️⃣ Gestion de la déconnexion
+  // 8️⃣ Logout handling
   // ---------------------------------------------------
   const handleUserLogout = () => {
     setCartItems({});
@@ -210,7 +210,7 @@ const StoreContextProvider = (props) => {
   };
 
   // ---------------------------------------------------
-  // 9️⃣ Vider le panier après commande
+  // 9️⃣ Clear cart after order
   // ---------------------------------------------------
   const clearCartAfterOrder = () => {
     setCartItems({});
@@ -220,7 +220,7 @@ const StoreContextProvider = (props) => {
   };
 
   // ---------------------------------------------------
-  // 🔟 Synchronisation manuelle
+  // 🔟 Manual synchronization
   // ---------------------------------------------------
   const syncCartWithUser = async () => {
     const user = getCurrentUser();
@@ -238,7 +238,7 @@ const StoreContextProvider = (props) => {
   };
 
   // ---------------------------------------------------
-  // 🔟➕❶ Réinitialiser complètement le panier
+  // 🔟➕❶ Force clear cart
   // ---------------------------------------------------
   const forceClearCart = () => {
     setCartItems({});
@@ -249,24 +249,24 @@ const StoreContextProvider = (props) => {
 
   // ---------------------------------------------------
   const contextValue = {
-    // Données
+    // Data
     food_list: foodList,
     cartItems,
     orderInfo,
     loading,
     error,
     
-    // Utilisateur
+    // User
     currentUser,
     userId,
     
-    // Fonctions panier
+    // Cart functions
     addToCart,
     removeFromCart,
     getTotalCartAmount,
     getTotalCartItems,
     
-    // Autres fonctions
+    // Other functions
     saveOrderInfo: (info) => setOrderInfo(info),
     clearCart: clearCartAfterOrder,
     handleUserLogout,
