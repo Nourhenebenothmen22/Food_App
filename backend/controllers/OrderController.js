@@ -20,11 +20,11 @@ const placeOrder = async (req, res) => {
             payment: false
         });
 
-        // 2️⃣ Update User document to reset carte
+        // 2️⃣ Update User document to reset cart
         await User.findByIdAndUpdate(
             userId,
-            { $set: { carte: {} } }, // $set pour modifier précisément le champ
-            { new: true }             // retourne le document mis à jour si besoin
+            { $set: { cart: {} } }, // $set to specifically modify the field
+            { new: true }           // returns updated document if needed
         );
 
         // 3️⃣ Build line items for Stripe Checkout
