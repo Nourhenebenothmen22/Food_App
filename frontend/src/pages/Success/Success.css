@@ -1,0 +1,167 @@
+.success-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.success-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(251, 146, 60, 0.2);
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid rgba(251, 146, 60, 0.2);
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.success-card h1 {
+  color: #7c2d12;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.success-card p {
+  color: #92400e;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #ea580c;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #c2410c;
+  transform: translateY(-2px);
+}
+
+/* Page d'accès non autorisé */
+.unauthorized-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.unauthorized-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.2);
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.unauthorized-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.unauthorized-card h1 {
+  color: #7f1d1d;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.unauthorized-card p {
+  color: #991b1b;
+  font-size: 1rem;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 10px 25px;
+  background: transparent;
+  color: #ea580c;
+  text-decoration: none;
+  border: 2px solid #ea580c;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin: 0 5px;
+}
+
+.btn-secondary:hover {
+  background: #ea580c;
+  color: white;
+}
+
+.btn-login {
+  display: inline-block;
+  padding: 10px 25px;
+  background: #ea580c;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin: 0 5px;
+  border: 2px solid #ea580c;
+}
+
+.btn-login:hover {
+  background: #c2410c;
+  transform: translateY(-2px);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .success-card,
+  .unauthorized-card {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+
+  .success-card h1,
+  .unauthorized-card h1 {
+    font-size: 1.6rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-secondary,
+  .btn-login {
+    width: 200px;
+    margin: 5px 0;
+  }
+}
