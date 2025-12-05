@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "/api/v1/*"
+  to = "https://food-app-solo.onrender.com/api/v1/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/images/*"
+  to = "https://food-app-solo.onrender.com/images/:splat"
+  status = 200
+  force = true
