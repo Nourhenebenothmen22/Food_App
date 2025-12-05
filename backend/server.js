@@ -20,18 +20,33 @@ const app = express();
 
 // ------------------------- MIDDLEWARES GÉNÉRAUX -------------------------
 app.use(helmet({
-  // Désactive la protection CSP pour les images en développement
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// Configuration CORS complète
+// ------------------------- CORS -------------------------
+// Autoriser localhost pour dev + Netlify pour prod
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5000',
+  'https://nomadiceats.netlify.app'
+];
+
 app.use(cors({
-  origin: ['http://localhost:5173','http://localhost:5174', 'http://localhost:5000'],
+  origin: function(origin, callback) {
+    // autoriser les requêtes sans origin (Postman ou serveur)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
+// ------------------------- BODY PARSERS -------------------------
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
@@ -57,7 +72,7 @@ app.use((req, res, next) => {
 
 // ------------------------- RATE LIMIT -------------------------
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000,
+  windowMs: 1 * 60 * 1000, // 1 minute
   max: 100,
   message: { error: 'Trop de requêtes, réessayez plus tard.' },
   standardHeaders: true,
@@ -66,7 +81,6 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // ------------------------- ROUTES STATIQUES -------------------------
-// IMPORTANT: Configuration spécifique pour les fichiers statiques
 app.use('/images', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, path) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -75,19 +89,16 @@ app.use('/images', express.static(path.join(__dirname, 'uploads'), {
   }
 }));
 
-
-// Route racine
+// ------------------------- ROUTES -------------------------
 app.get('/', (req, res) => {
   console.log(chalk.green('Route / visitée'));
   res.send('Backend sécurisé et prêt ✅');
 });
 
-// API Routes
 app.use('/api/v1/auth', require('./routes/authRoutes'));
 app.use('/api/v1/food', require('./routes/FoodRoutes'));
 app.use('/api/v1/cart', require('./routes/cartRoutes'));
 app.use('/api/v1/order', require('./routes/OrderRoutes'));
-
 
 // ------------------------- ERROR HANDLING -------------------------
 app.use((req, res) => {
