@@ -69,12 +69,12 @@ app.use(limiter);
 // IMPORTANT: Configuration spécifique pour les fichiers statiques
 app.use('/images', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, path) => {
-    // Headers CORS pour les images
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
   }
 }));
+
 
 // Route racine
 app.get('/', (req, res) => {
