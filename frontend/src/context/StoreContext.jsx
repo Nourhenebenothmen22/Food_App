@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
 export const StoreContext = createContext(null);
+const API_URL = import.meta.env.VITE_API_URL; // Exemple: https://food-app-solo.onrender.com
 
 const StoreContextProvider = (props) => {
   // ---------------------------------------------------
@@ -40,7 +41,7 @@ const StoreContextProvider = (props) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/v1/cart/get/${userId}`
+        `${API_URL}/api/v1/cart/get/${userId}`
       );
       if (response.data.success) {
         return response.data.cart;
@@ -58,7 +59,7 @@ const StoreContextProvider = (props) => {
     const initializeData = async () => {
       const user = getCurrentUser();
       const newUserId = getUserId();
-      
+
       setCurrentUser(user);
       setUserId(newUserId);
 
@@ -81,23 +82,19 @@ const StoreContextProvider = (props) => {
       const user = getCurrentUser();
       const newUserId = getUserId();
 
-      // If user changed
       if (newUserId !== userId) {
         setCurrentUser(user);
         setUserId(newUserId);
 
         if (newUserId) {
-          // New user logged in → load their cart
           const cart = await getInitialCart(newUserId);
           setCartItems(cart);
         } else {
-          // User logged out → clear visual cart
           setCartItems({});
         }
       }
     };
 
-    // Check for changes every 2 seconds
     const interval = setInterval(checkUserChange, 2000);
 
     return () => clearInterval(interval);
@@ -125,7 +122,7 @@ const StoreContextProvider = (props) => {
   const fetchFoodList = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/api/v1/food");
+      const response = await axios.get(`${API_URL}/api/v1/food`);
       setFoodList(response.data);
       setError(null);
     } catch (err) {
@@ -147,7 +144,7 @@ const StoreContextProvider = (props) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/cart/add",
+        `${API_URL}/api/v1/cart/add`,
         { userId, itemId },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -167,7 +164,7 @@ const StoreContextProvider = (props) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/cart/remove",
+        `${API_URL}/api/v1/cart/remove`,
         { userId, itemId },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -197,7 +194,10 @@ const StoreContextProvider = (props) => {
   const getTotalCartItems = () => {
     if (!userId) return 0;
 
-    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
+    return Object.values(cartItems).reduce(
+      (total, quantity) => total + quantity,
+      0
+    );
   };
 
   // ---------------------------------------------------
@@ -238,8 +238,6 @@ const StoreContextProvider = (props) => {
   };
 
   // ---------------------------------------------------
-  // 🔟➕❶ Force clear cart
-  // ---------------------------------------------------
   const forceClearCart = () => {
     setCartItems({});
     if (userId) {
@@ -249,24 +247,17 @@ const StoreContextProvider = (props) => {
 
   // ---------------------------------------------------
   const contextValue = {
-    // Data
     food_list: foodList,
     cartItems,
     orderInfo,
     loading,
     error,
-    
-    // User
     currentUser,
     userId,
-    
-    // Cart functions
     addToCart,
     removeFromCart,
     getTotalCartAmount,
     getTotalCartItems,
-    
-    // Other functions
     saveOrderInfo: (info) => setOrderInfo(info),
     clearCart: clearCartAfterOrder,
     handleUserLogout,

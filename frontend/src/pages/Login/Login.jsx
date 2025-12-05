@@ -5,48 +5,39 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './Login.css';
 
-const url = "http://localhost:5000/api/v1/auth";
+// URL du backend via .env
+const API_URL = import.meta.env.VITE_API_URL;
 
-// Configuration axios pour accepter les cookies
+// Config axios
 axios.defaults.withCredentials = true;
 
 function Login() {
-  const [data, setData] = useState({
-    email: "",
-    password: ""
-  });
+  const [data, setData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    setData(prev => ({
-      ...prev, 
-      [name]: value 
-    }));
+    setData(prev => ({ ...prev, [name]: value }));
   };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Validation basique
     if (!data.email || !data.password) {
-      toast.error('Please fill in all fields', {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error('Please fill in all fields');
       setIsLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post(`${url}/login`, data, {
-        withCredentials: true 
+      const response = await axios.post(`${API_URL}/api/v1/auth/login`, data, {
+        withCredentials: true
       });
-      
+
       if (response.data.message === "Login successful") {
-      
+
         const userData = {
           id: response.data.user.id,
           email: response.data.user.email,
@@ -56,64 +47,29 @@ function Login() {
 
         localStorage.setItem('user', JSON.stringify(userData));
 
-        // Afficher le toast AVANT la redirection
         toast.success('Login successful!', {
-          position: "top-right",
-          autoClose: 2000,
-          onClose: () => {
-            // Redirection APRÈS la fermeture du toast
-            navigate('/');
-          }
-        });
-        
-        // Réinitialiser le formulaire
-        setData({
-          email: "",
-          password: ""
+          autoClose: 1500,
+          onClose: () => navigate('/')
         });
 
+        setData({ email: "", password: "" });
+
       } else {
-        toast.error(response.data.message || 'Login failed', {
-          position: "top-right",
-          autoClose: 4000,
-        });
+        toast.error(response.data.message || 'Login failed');
       }
+
     } catch (error) {
       console.error('Login error:', error);
+
+      if (error.response?.status === 401) toast.error('Invalid email or password');
+      else if (error.response?.status === 404) toast.error('User not found');
+      else if (error.response?.status === 429) toast.error('Too many attempts');
+      else toast.error('Server error. Please try again.');
       
-      // Gestion d'erreurs spécifiques
-      if (error.response?.status === 401) {
-        toast.error('Invalid email or password', {
-          position: "top-right",
-          autoClose: 4000,
-        });
-      } else if (error.response?.status === 404) {
-        toast.error('User not found', {
-          position: "top-right",
-          autoClose: 4000,
-        });
-      } else if (error.response?.status === 429) {
-        toast.error('Too many attempts. Please try again later.', {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      } else if (error.code === 'NETWORK_ERROR' || error.code === 'ERR_NETWORK') {
-        toast.error('Network error. Please check your connection.', {
-          position: "top-right",
-          autoClose: 4000,
-        });
-      } else {
-        toast.error(error.response?.data?.message || 'An error occurred. Please try again.', {
-          position: "top-right",
-          autoClose: 4000,
-        });
-      }
     } finally {
       setIsLoading(false);
     }
   };
-
- 
 
   return (
     <div className="auth-container">
@@ -141,18 +97,16 @@ function Login() {
 
           <div className="form-group">
             <label>Password</label>
-            <div className="password-input">
-              <input
-                type="password"
-                name="password"
-                className="form-input"
-                placeholder="Enter your password"
-                onChange={onChangeHandler}
-                value={data.password}
-                required
-                disabled={isLoading}
-              />
-            </div>
+            <input
+              type="password"
+              name="password"
+              className="form-input"
+              placeholder="Enter your password"
+              onChange={onChangeHandler}
+              value={data.password}
+              required
+              disabled={isLoading}
+            />
           </div>
 
           <button 

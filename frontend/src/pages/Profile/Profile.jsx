@@ -10,7 +10,7 @@ function Profile() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const url = "http://localhost:5000/api/v1/auth";
+const url = `${import.meta.env.VITE_API_URL}`;
 
   // Fetch user profile on component mount
   const getProfile = async () => {
@@ -36,7 +36,7 @@ function Profile() {
         return;
       }
 
-      const response = await axios.get(`${url}/${userId}`);
+      const response = await axios.get(`${url}/api/v1/auth/${userId}`);
 
       if (response.data.user) {
         setProfile(response.data.user);
@@ -55,34 +55,6 @@ function Profile() {
       } else {
         setError("Server error while fetching profile");
       }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Update profile
-  const updateProfile = async (updatedData) => {
-    try {
-      setLoading(true);
-      const userData = localStorage.getItem("user");
-      const user = JSON.parse(userData);
-      const userId = user.id || user._id;
-
-      const response = await axios.put(`${url}/profile/${userId}`, updatedData);
-
-      if (response.data.success) {
-        setProfile(response.data.user);
-
-        const updatedUser = { ...user, ...response.data.user };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error("Update error:", error);
-      setError("Error updating profile");
-      return false;
     } finally {
       setLoading(false);
     }
@@ -165,7 +137,6 @@ function Profile() {
             {/* Buttons */}
             <div className="profile-actions">
               <button
-                onClick={() => navigate("/edit-profile")}
                 className="edit-btn"
               >
                 Edit Profile

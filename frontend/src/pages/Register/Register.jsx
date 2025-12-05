@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import './Register.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+import "./Register.css";
 
-const url = "http://localhost:5000/api/v1/auth";
+const url = `${import.meta.env.VITE_API_URL}/api/v1/auth`;
 
 function Register() {
   const [formData, setFormData] = useState({
-    name: '', // Changé de fullName à name
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'user'
+    name: "", 
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "user",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,14 +21,14 @@ function Register() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleRoleSelect = (role) => {
     setFormData({
       ...formData,
-      role: role
+      role: role,
     });
   };
 
@@ -37,8 +37,13 @@ function Register() {
     setIsLoading(true);
 
     // Validation
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      toast.error('Please fill in all fields', {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      toast.error("Please fill in all fields", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -47,7 +52,7 @@ function Register() {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match', {
+      toast.error("Passwords do not match", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -56,7 +61,7 @@ function Register() {
     }
 
     if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters long', {
+      toast.error("Password must be at least 6 characters long", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -65,37 +70,36 @@ function Register() {
     }
 
     try {
-      console.log('Sending registration data:', formData);
-      
+      console.log("Sending registration data:", formData);
+
       const response = await axios.post(`${url}/register`, formData, {
-        withCredentials: true 
+        withCredentials: true,
       });
 
-      console.log('Registration successful:', response.data);
-      
-      toast.success('Registration successful!', {
+      console.log("Registration successful:", response.data);
+
+      toast.success("Registration successful!", {
         position: "top-right",
         autoClose: 2000,
         onClose: () => {
-          navigate('/login');
-        }
+          navigate("/login");
+        },
       });
 
       // Reset form
       setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        role: 'user'
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "user",
       });
-
     } catch (error) {
-      console.error('Full registration error:', error);
-      console.error('Error response:', error.response);
-      console.error('Error data:', error.response?.data);
-      console.error('Error status:', error.response?.status);
-      
+      console.error("Full registration error:", error);
+      console.error("Error response:", error.response);
+      console.error("Error data:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+
       // Meilleure gestion d'erreur
       if (error.response?.data?.error) {
         // Afficher l'erreur spécifique de validation MongoDB
@@ -109,12 +113,12 @@ function Register() {
           autoClose: 4000,
         });
       } else if (error.response?.status === 500) {
-        toast.error('Server error. Please try again later.', {
+        toast.error("Server error. Please try again later.", {
           position: "top-right",
           autoClose: 4000,
         });
       } else {
-        toast.error('Registration failed. Please check your connection.', {
+        toast.error("Registration failed. Please check your connection.", {
           position: "top-right",
           autoClose: 4000,
         });
@@ -163,16 +167,20 @@ function Register() {
           <div className="form-group">
             <label>Account Type</label>
             <div className="role-options">
-              <div 
-                className={`role-option ${formData.role === 'user' ? 'selected' : ''}`}
-                onClick={() => handleRoleSelect('user')}
+              <div
+                className={`role-option ${
+                  formData.role === "user" ? "selected" : ""
+                }`}
+                onClick={() => handleRoleSelect("user")}
               >
                 <span className="role-icon">👤</span>
                 User
               </div>
-              <div 
-                className={`role-option ${formData.role === 'admin' ? 'selected' : ''}`}
-                onClick={() => handleRoleSelect('admin')}
+              <div
+                className={`role-option ${
+                  formData.role === "admin" ? "selected" : ""
+                }`}
+                onClick={() => handleRoleSelect("admin")}
               >
                 <span className="role-icon">👑</span>
                 Admin
@@ -217,18 +225,16 @@ function Register() {
             />
           </div>
 
-          <button 
-            type="submit" 
-            className="auth-btn"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Creating Account...' : 'Create Account'}
+          <button type="submit" className="auth-btn" disabled={isLoading}>
+            {isLoading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
         <div className="auth-footer">
           Already have an account?
-          <Link to="/login" className="auth-link">Sign In</Link>
+          <Link to="/login" className="auth-link">
+            Sign In
+          </Link>
         </div>
       </div>
     </div>
