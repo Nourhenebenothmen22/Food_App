@@ -29,7 +29,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174', 
   'http://localhost:5000',
-  'https://nomadiceats.netlify.app',
+  'https://mytomatoapp.netlify.app',
   'https://food-app-solo.onrender.com'
 ];
 
