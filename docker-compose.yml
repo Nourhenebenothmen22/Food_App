@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    image: node:22
+    container_name: api
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: ["npm", "run", "dev"]
+    ports:
+      - "5000:5000"   # backend → http://localhost:5000
+
+  web:
+    image: node:22
+    container_name: web
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    ports:
+      - "5173:5173"   # frontend → http://localhost:5173
+   
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: nourhene
+      MONGO_INITDB_ROOT_PASSWORD: nourhene
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db   
+volumes:
+  mongo_data:
