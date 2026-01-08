@@ -4,7 +4,7 @@ name: Notify on commit or PR
 on:
   push:
     branches:
-      - main       # ou ta branche principale
+      - main       # Modifie si tu veux surveiller une autre branche
   pull_request:
     branches:
       - main
@@ -26,12 +26,13 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "GitHub Notification: ${{ github.event_name }}"
+          subject: "Nouvelle action sur le repo : ${{ github.event_name }}"
           body: |
-            Repo: ${{ github.repository }}
-            Event: ${{ github.event_name }}
-            Ref: ${{ github.ref }}
-            Commit message: ${{ github.event.head_commit.message }}
-          to: ton.email@example.com
-          from: ton.email@example.com
+            Repository : ${{ github.repository }}
+            Type d'événement : ${{ github.event_name }}
+            Branche : ${{ github.ref }}
+            Auteur : ${{ github.actor }}
+            Message : ${{ github.event_name == 'push' && github.event.head_commit.message || github.event.pull_request.title }}
+          to: nourhene.benothmen@iteam-univ.tn       
+          from: nourhene.benothmen@iteam-univ.tn   
           secure: true
