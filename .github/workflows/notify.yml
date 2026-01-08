@@ -1,6 +1,7 @@
 name: Notify on commit or PR
 
 on:
+  workflow_dispatch:        # ✅ Lancement manuel (Run workflow)
   push:
     branches:
       - main
