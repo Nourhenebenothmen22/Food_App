@@ -1,10 +1,9 @@
 name: Notify on commit or PR
 
-# Déclencheurs du workflow
 on:
   push:
     branches:
-      - main       # Modifie si tu veux surveiller une autre branche
+      - main
   pull_request:
     branches:
       - main
@@ -14,25 +13,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Récupérer le code du dépôt
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Envoyer l'email
-      - name: Send Email Notification
+      - name: Send Email Notification (Mailtrap)
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
+          server_address: ${{ secrets.MAILTRAP_HOST }}
+          server_port: ${{ secrets.MAILTRAP_PORT }}
+          username: ${{ secrets.MAILTRAP_USER }}
+          password: ${{ secrets.MAILTRAP_PASS }}
+
           subject: "Nouvelle action sur le repo : ${{ github.event_name }}"
+          to: test@mailtrap.io
+          from: GitHub CI <ci@example.com>
+
           body: |
             Repository : ${{ github.repository }}
             Type d'événement : ${{ github.event_name }}
             Branche : ${{ github.ref }}
             Auteur : ${{ github.actor }}
-            Message : ${{ github.event_name == 'push' && github.event.head_commit.message || github.event.pull_request.title }}
-          to: nourhene.benothmen@iteam-univ.tn       
-          from: nourhene.benothmen@iteam-univ.tn   
-          secure: true
+            Message :
+            ${{ github.event_name == 'push' && github.event.head_commit.message || github.event.pull_request.title }}
