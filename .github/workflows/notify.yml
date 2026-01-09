@@ -1,0 +1,38 @@
+name: Notify on commit or PR
+
+on:
+  workflow_dispatch:        # ✅ Lancement manuel (Run workflow)
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Send Email Notification (Mailtrap)
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAILTRAP_HOST }}
+          server_port: ${{ secrets.MAILTRAP_PORT }}
+          username: ${{ secrets.MAILTRAP_USER }}
+          password: ${{ secrets.MAILTRAP_PASS }}
+
+          subject: "Nouvelle action sur le repo : ${{ github.event_name }}"
+          to: test@mailtrap.io
+          from: GitHub CI <ci@example.com>
+
+          body: |
+            Repository : ${{ github.repository }}
+            Type d'événement : ${{ github.event_name }}
+            Branche : ${{ github.ref }}
+            Auteur : ${{ github.actor }}
+            Message :
+            ${{ github.event_name == 'push' && github.event.head_commit.message || github.event.pull_request.title }}
