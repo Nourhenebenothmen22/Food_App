@@ -30,8 +30,9 @@ const allowedOrigins = [
   'http://localhost:5174', 
   'http://localhost:5000',
   'https://mytomatoapp.netlify.app',
-  'https://food-app-solo.onrender.com'
-];
+  'https://food-app-solo.onrender.com',
+  process.env.CLIENT_URL // Ajout de l'URL client depuis le .env
+].filter(Boolean); // Retire les valeurs undefined/null
 
 app.use(cors({
   origin: function(origin, callback) {
@@ -45,18 +46,12 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // 3. Autoriser les sous-domaines Netlify (important pour les prévisualisations)
-    if (origin.includes('.netlify.app')) {
+    // 3. Autoriser les sous-domaines Netlify
+    if (origin.endsWith('.netlify.app')) {
       return callback(null, true);
     }
     
-    // 4. En développement, tout autoriser (optionnel mais pratique)
-    if (process.env.NODE_ENV === 'development') {
-      console.log(chalk.yellow(`⚠️  Autorisation CORS en dev pour: ${origin}`));
-      return callback(null, true);
-    }
-    
-    // 5. Sinon, refuser
+    // 4. Sinon, refuser
     console.log(chalk.red(`❌ CORS bloqué pour: ${origin}`));
     callback(new Error('Not allowed by CORS'));
   },

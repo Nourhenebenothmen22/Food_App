@@ -21,11 +21,13 @@ const upload = multer({
   }
 });
 
+const authMiddleware = require('../middlewares/authMiddleware');
+
 // CRUD Food
-router.post('/', upload.single('image'), FoodController.addFood);
+router.post('/', authMiddleware, upload.single('image'), FoodController.addFood);
 router.get('/', FoodController.getAllFoods);
 router.get('/:id', FoodController.getFoodById);
-router.put('/:id', upload.single('image'), FoodController.updateFood);
-router.delete('/:id', FoodController.deleteFood);
+router.put('/:id', authMiddleware, upload.single('image'), FoodController.updateFood);
+router.delete('/:id', authMiddleware, FoodController.deleteFood);
 
 module.exports = router;

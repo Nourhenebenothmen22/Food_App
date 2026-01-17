@@ -126,9 +126,9 @@ exports.login = async (req, res) => {
 
         // 5️⃣ Store the token in an HTTP-only cookie
         res.cookie('token', token, {
-            httpOnly: true,  
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            httpOnly: true,
+            secure: true, // Toujours secure pour SameSite: none, ou en prod
+            sameSite: 'none', // Nécessaire pour le cross-domain (ex: Netlify -> Render)
             maxAge: 60 * 60 * 1000 // 1 hour
         });
 
